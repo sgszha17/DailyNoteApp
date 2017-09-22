@@ -235,7 +235,8 @@ C:\Users\HPHP\Documents\GitHub\DailyNoteApp\DailyNoteDB\DailyNoteService\bin\ko\
 C:\Users\HPHP\Documents\GitHub\DailyNoteApp\DailyNoteDB\DailyNoteService\bin\ru\System.Spatial.resources.dll
 C:\Users\HPHP\Documents\GitHub\DailyNoteApp\DailyNoteDB\DailyNoteService\bin\zh-Hans\System.Spatial.resources.dll
 C:\Users\HPHP\Documents\GitHub\DailyNoteApp\DailyNoteDB\DailyNoteService\bin\zh-Hant\System.Spatial.resources.dll
-C:\Users\HPHP\Documents\GitHub\DailyNoteApp\DailyNoteDB\DailyNoteService\obj\Release\DailyNoteService.csprojResolveAssemblyReference.cache
 C:\Users\HPHP\Documents\GitHub\DailyNoteApp\DailyNoteDB\DailyNoteService\obj\Release\DailyNoteService.csproj.CoreCompileInputs.cache
 C:\Users\HPHP\Documents\GitHub\DailyNoteApp\DailyNoteDB\DailyNoteService\obj\Release\DailyNoteService.dll
 C:\Users\HPHP\Documents\GitHub\DailyNoteApp\DailyNoteDB\DailyNoteService\obj\Release\DailyNoteService.pdb
+C:\Users\HPHP\Documents\GitHub\DailyNoteApp\DailyNoteDB\DailyNoteService\obj\Release\DailyNoteService.Migrations.M1.resources
+C:\Users\HPHP\Documents\GitHub\DailyNoteApp\DailyNoteDB\DailyNoteService\obj\Release\DailyNoteService.csproj.GenerateResource.Cache
