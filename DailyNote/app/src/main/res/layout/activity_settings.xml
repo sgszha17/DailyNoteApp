@@ -46,10 +46,25 @@
                 android:text="@string/photo"
                 android:id="@+id/photo_text"
                 android:textColor="#ffffff"/>
-            <ImageView
-                android:layout_width="45sp"
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
                 android:layout_height="45sp"
-                android:id="@+id/user_headShot"/>
+                android:layout_centerVertical="true"
+                android:gravity="center_vertical">
+                <com.example.dailynote.RoundImageView
+                    android:id="@+id/user_headShot"
+                    android:layout_width="45sp"
+                    android:layout_height="45sp"
+                    android:layout_centerHorizontal="true"
+                    android:scaleType="centerCrop"/>
+                <ImageView
+                    android:layout_width="45sp"
+                    android:layout_height="45sp"
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/usericon_bg_circle"/>
+            </RelativeLayout>
+
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"

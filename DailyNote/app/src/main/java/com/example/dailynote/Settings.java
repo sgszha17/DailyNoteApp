@@ -9,6 +9,7 @@ import android.util.TypedValue;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class Settings extends Activity {
@@ -19,6 +20,7 @@ public class Settings extends Activity {
     private ImageButton returnButton;
     private TextView personInfo;
     private TextView photoText;
+    private RoundImageView headshot;
     private TextView accountText;
     private TextView nameText;
 
@@ -74,6 +76,18 @@ public class Settings extends Activity {
         photoText = (TextView) findViewById(R.id.photo_text);
         photoText.setTypeface(sans_serif);
         photoText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+
+        headshot = (RoundImageView) findViewById(R.id.user_headShot);
+        headshot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // choose images from photo gallery or take new photos
+                Intent intent = new Intent();
+                intent.setClass(Settings.this, ChooseHeadshot.class);
+                startActivity(intent);
+                Settings.this.finish();
+            }
+        });
 
         accountText = (TextView) findViewById(R.id.account_text);
         accountText.setTypeface(sans_serif);

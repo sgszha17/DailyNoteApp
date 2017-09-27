@@ -12,6 +12,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 
     <application
         android:allowBackup="true"
@@ -25,13 +26,13 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name="com.example.zumoappname.Notes">
-        </activity>
         <activity android:name=".Notes">
         </activity>
         <activity android:name=".Settings">
         </activity>
         <activity android:name=".newNote">
+        </activity>
+        <activity android:name=".ChooseHeadshot">
         </activity>
     </application>
 
