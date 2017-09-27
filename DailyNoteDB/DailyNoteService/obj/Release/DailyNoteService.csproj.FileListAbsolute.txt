@@ -240,3 +240,4 @@ C:\Users\HPHP\Documents\GitHub\DailyNoteApp\DailyNoteDB\DailyNoteService\obj\Rel
 C:\Users\HPHP\Documents\GitHub\DailyNoteApp\DailyNoteDB\DailyNoteService\obj\Release\DailyNoteService.pdb
 C:\Users\HPHP\Documents\GitHub\DailyNoteApp\DailyNoteDB\DailyNoteService\obj\Release\DailyNoteService.Migrations.M1.resources
 C:\Users\HPHP\Documents\GitHub\DailyNoteApp\DailyNoteDB\DailyNoteService\obj\Release\DailyNoteService.csproj.GenerateResource.Cache
+C:\Users\HPHP\Documents\GitHub\DailyNoteApp\DailyNoteDB\DailyNoteService\obj\Release\DailyNoteService.csprojResolveAssemblyReference.cache
