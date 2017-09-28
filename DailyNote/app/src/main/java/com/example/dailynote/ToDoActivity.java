@@ -10,15 +10,25 @@ import java.util.concurrent.TimeUnit;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Intent;
+import android.content.res.AssetManager;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
@@ -44,7 +54,16 @@ import com.squareup.okhttp.OkHttpClient;
 import static com.microsoft.windowsazure.mobileservices.table.query.QueryOperations.*;
 
 public class ToDoActivity extends Activity {
-
+    /*Changed by Tong Zou*/
+    private LinearLayout mainLayout;
+    private TextView appName;
+    private AssetManager assetManager;
+    private Typeface typeface;
+    DisplayMetrics dm = new DisplayMetrics();
+    private ImageButton facebook_login;
+    private ImageButton google_login;
+    private ImageButton wechat_login;
+    private Button testButton;
     /**
      * Mobile Service Client reference
      */
@@ -84,10 +103,50 @@ public class ToDoActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_to_do);
 
-        mProgressBar = (ProgressBar) findViewById(R.id.loadingProgressBar);
+        mainLayout = (LinearLayout) findViewById(R.id.mainLayout);
+        mainLayout.setBackgroundColor(Color.rgb(48, 66,82));
+        appName = (TextView) findViewById(R.id.appName);
+        assetManager = getAssets();
+        typeface = Typeface.createFromAsset(assetManager, "Kannada MN.ttc");
+        appName.setTypeface(typeface);
+        appName.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50);
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+        int height = dm.heightPixels;
+        int width = dm.widthPixels;
 
-        // Initialize the progress bar
-        mProgressBar.setVisibility(ProgressBar.GONE);
+        testButton = (Button) findViewById(R.id.testingButton);
+
+        facebook_login = (ImageButton) findViewById(R.id.facebook);
+        facebook_login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+        google_login = (ImageButton) findViewById(R.id.google);
+        google_login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+        wechat_login = (ImageButton) findViewById(R.id.wechat);
+        wechat_login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        testButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.setClass(ToDoActivity.this, Notes.class);
+                startActivity(intent);
+                ToDoActivity.this.finish();
+            }
+        });
 
         try {
             // Create the Mobile Service Client instance, using the provided
@@ -118,12 +177,8 @@ public class ToDoActivity extends Activity {
             //Init local storage
             initLocalStore().get();
 
-            mTextNewToDo = (EditText) findViewById(R.id.textNewToDo);
-
             // Create an adapter to bind the items with the view
-            mAdapter = new ToDoItemAdapter(this, R.layout.row_list_to_do);
-            ListView listViewToDo = (ListView) findViewById(R.id.listViewToDo);
-            listViewToDo.setAdapter(mAdapter);
+            //mAdapter = new ToDoItemAdapter(this, R.layout.row_list_to_do);
 
             // Load the items from the Mobile Service
             refreshItemsFromTable();

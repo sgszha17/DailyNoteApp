@@ -6,5 +6,19 @@
     <string name="service_title">Mobile Apps </string>
     <string name="menu_refresh">Refresh</string>
     <string name="checkbox_text">Item Text</string>
+    <string name="onlyForTest">Only for test</string>
+    <string name="PersonInfo">Personal Information</string>
+    <string name="SysSetting">System Settings</string>
+    <string name="general">General</string>
+    <string name="SysSetting1">Automatically Transform Voice to Text</string>
+    <string name="SysSetting2">Display Location on Screen</string>
+    <string name="SysSetting3">Display Weather on Screen</string>
+    <string name="photo">Photo: </string>
+    <string name="account">Account: </string>
+    <string name="name">Name: </string>
+    <string name="log_out">Log Out</string>
+    <string name="clear_cache">Clear Cache</string>
+    <string name="delete_notes">Delete All Notes</string>
+    <string name="done">Done</string>
 
 </resources>

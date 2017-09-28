@@ -1,65 +1,55 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/LinearLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center_vertical"
+    android:id="@+id/mainLayout"
     android:orientation="vertical"
     >
-
-    <LinearLayout
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textColor="#ffffff"
+        android:id="@+id/appName"
+        android:text="@string/app_name"
+        />
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#71BCFA"
-        android:padding="6dip" >
-
-        <TextView
-            android:id="@+id/textViewTitle"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="2dp"
-            android:layout_weight="0.12"
-            android:text="@string/service_title"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-        <ProgressBar
-            android:id="@+id/loadingProgressBar"
-            android:layout_width="28dp"
-            android:layout_height="28dp" />
-    </LinearLayout>
-
-     <LinearLayout
-        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:id="@+id/loginButton_layout"
+        android:gravity="center_horizontal"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginTop="120dp">
+        <ImageButton
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentLeft="true"
+            android:id="@+id/facebook"
+            android:background="@drawable/facebook_logo"/>
+        <ImageButton
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:id="@+id/google"
+            android:layout_centerInParent="true"
+            android:background="@drawable/google_logo"/>
+        <ImageButton
+            android:layout_width="47dp"
+            android:layout_height="47dp"
+            android:layout_alignParentRight="true"
+            android:id="@+id/wechat"
+            android:background="@drawable/wechat_logo"
+            />
+    </RelativeLayout>
+    <Button
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#71BCFA"
-        android:padding="6dip"  >
-
-        <EditText
-            android:id="@+id/textNewToDo"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:hint="@string/add_textbox_hint" >
-
-            <requestFocus />
-       </EditText>
-
-        <Button
-            android:id="@+id/buttonAddToDo"
-            android:layout_width="64dip"
-            android:layout_height="wrap_content"
-            android:onClick="addItem"
-            android:text="@string/add_button_text" />
-
-    </LinearLayout>
-
-    <ListView
-        android:id="@+id/listViewToDo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:listitem="@layout/row_list_to_do"
-        android:padding="6dip" >
-
-    </ListView>
+        android:layout_gravity="center"
+        android:text="@string/onlyForTest"
+        android:layout_marginTop="30dp"
+        android:id="@+id/testingButton"/>
 
 </LinearLayout>
