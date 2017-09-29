@@ -58,7 +58,57 @@ namespace DailyNoteService.Migrations
                     })
                 .PrimaryKey(t => t.Id)
                 .Index(t => t.CreatedAt, clustered: true);
-            
+
+            CreateTable(
+                "dbo.Users",
+                c2 => new
+                {
+                    Email = c2.String(nullable: false, maxLength: 128),
+                    UserName = c2.String(),
+                    UserID = c2.String(nullable: false, maxLength: 128,
+                            annotations: new Dictionary<string, AnnotationValues>
+                            {
+                                {
+                                    "ServiceTableColumn",
+                                    new AnnotationValues(oldValue: null, newValue: "UserID")
+                                },
+                            }),
+
+                    RegisterType = c2.Int(nullable: null,
+                            annotations: new Dictionary<string, AnnotationValues>
+                            {
+                                {
+                                    "ServiceTableColumn",
+                                    new AnnotationValues(oldValue: null, newValue: "RegisterType")
+                                },
+                            }),
+                    CreatedAt = c2.DateTimeOffset(nullable: false, precision: 7,
+                            annotations: new Dictionary<string, AnnotationValues>
+                            {
+                                {
+                                    "ServiceTableColumn",
+                                    new AnnotationValues(oldValue: null, newValue: "CreatedAt")
+                                },
+                            }),
+                    UpdatedAt = c2.DateTimeOffset(precision: 7,
+                            annotations: new Dictionary<string, AnnotationValues>
+                            {
+                                {
+                                    "ServiceTableColumn",
+                                    new AnnotationValues(oldValue: null, newValue: "UpdatedAt")
+                                },
+                            }),
+                    UseGoogle = c2.String(),
+
+                    UseFB = c2.String(),
+
+                    UseWechat = c2.String(),
+
+                    AdditionalData = c2.String(),
+
+                })
+                .PrimaryKey(t2 => t2.Email)
+                .Index(t2 => t2.CreatedAt, clustered: true);
         }
         
         public override void Down()

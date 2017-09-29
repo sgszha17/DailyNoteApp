@@ -158,7 +158,9 @@
   <ItemGroup>
     <Compile Include="App_Start\Startup.MobileApp.cs" />
     <Compile Include="Controllers\TodoItemController.cs" />
+    <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
+    <Compile Include="DataObjects\Users.cs" />
     <Compile Include="DataObjects\TodoItem.cs" />
     <Compile Include="Migrations\201709270535095_M1.cs" />
     <Compile Include="Migrations\201709270535095_M1.Designer.cs">
