@@ -20,5 +20,12 @@
     <string name="clear_cache">Clear Cache</string>
     <string name="delete_notes">Delete All Notes</string>
     <string name="done">Done</string>
+    <string name="logout">Log out</string>
+    <string name="sign_in">Sign In</string>
+    <string name="loading">Loading...</string>
+    <string name="signed_in_fmt">%s</string>
+    <string name="signed_out">You are not signed in</string>
+    <string name="speech_not_supported">This function is not supported</string>
+    <string name="speech_prompt">Speak Now</string>
 
 </resources>
