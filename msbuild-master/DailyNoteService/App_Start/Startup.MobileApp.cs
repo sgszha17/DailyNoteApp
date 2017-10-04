@@ -53,16 +53,16 @@ namespace DailyNoteService
     {
         protected override void Seed(DailyNoteContext context)
         {
-            List<TodoItem> todoItems = new List<TodoItem>
-            {
-                new TodoItem { Id = Guid.NewGuid().ToString(), Text = "First item", Complete = false },
-                new TodoItem { Id = Guid.NewGuid().ToString(), Text = "Second item", Complete = false },
-            };
+          //  List<Users> todoItems = new List<Users>
+            //{
+              //  new Users { Id = Guid.NewGuid().ToString(), Text = "First item", Complete = false },
+               // new Users { Id = Guid.NewGuid().ToString(), Text = "Second item", Complete = false },
+            //};
 
-            foreach (TodoItem todoItem in todoItems)
-            {
-                context.Set<TodoItem>().Add(todoItem);
-            }
+          //  foreach (Users user in users)
+           // {
+            //    context.Set<Users>().Add(todoItem);
+           // }
 
             base.Seed(context);
         }

@@ -22,7 +22,7 @@ namespace DailyNoteService.Models
         {
         } 
 
-        public DbSet<TodoItem> TodoItems { get; set; }
+        public DbSet<Users> Users { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

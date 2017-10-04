@@ -147,9 +147,6 @@
     <Reference Include="System.Web.Http.Tracing">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Tracing.5.2.3\lib\net45\System.Web.Http.Tracing.dll</HintPath>
     </Reference>
-    <Reference Include="System.Web.Http.WebHost, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
-    </Reference>
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -157,14 +154,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\Startup.MobileApp.cs" />
-    <Compile Include="Controllers\TodoItemController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="DataObjects\Users.cs" />
-    <Compile Include="DataObjects\TodoItem.cs" />
-    <Compile Include="Migrations\201709270535095_M1.cs" />
-    <Compile Include="Migrations\201709270535095_M1.Designer.cs">
-      <DependentUpon>201709270535095_M1.cs</DependentUpon>
+    <Compile Include="Migrations\201710031411356_M1.cs" />
+    <Compile Include="Migrations\201710031411356_M1.Designer.cs">
+      <DependentUpon>201710031411356_M1.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\DailyNoteContext.cs" />
@@ -187,8 +182,8 @@
     <None Include="Properties\PublishProfiles\DailyNote - Web Deploy.pubxml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201709270535095_M1.resx">
-      <DependentUpon>201709270535095_M1.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201710031411356_M1.resx">
+      <DependentUpon>201710031411356_M1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

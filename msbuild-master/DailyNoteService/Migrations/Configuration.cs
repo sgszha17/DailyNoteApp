@@ -11,7 +11,7 @@ namespace DailyNoteService.Migrations
         public Configuration()
         {
             AutomaticMigrationsEnabled = true;
-            SetSqlGenerator("System.Data.SqlClient",new EntityTableSqlGenerator());
+            SetSqlGenerator("System.Data.SqlClient", new EntityTableSqlGenerator());
         }
 
         protected override void Seed(DailyNoteService.Models.DailyNoteContext context)

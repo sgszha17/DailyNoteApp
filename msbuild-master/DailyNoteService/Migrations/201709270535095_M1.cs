@@ -63,23 +63,28 @@ namespace DailyNoteService.Migrations
                 "dbo.Users",
                 c2 => new
                 {
-                    Email = c2.String(nullable: false, maxLength: 128),
-                    UserName = c2.String(),
-                    UserID = c2.String(nullable: false, maxLength: 128,
+                    Id = c2.String(nullable: false, maxLength: 128,
                             annotations: new Dictionary<string, AnnotationValues>
                             {
                                 {
                                     "ServiceTableColumn",
-                                    new AnnotationValues(oldValue: null, newValue: "UserID")
+                                    new AnnotationValues(oldValue: null, newValue: "Id")
                                 },
                             }),
-
-                    RegisterType = c2.Int(nullable: null,
+                    Email = c2.String(),
+                    Username = c2.String(),
+                    Password = c2.String(),
+                    RegisterType = c2.Int(nullable: false),
+                    UseGoogle = c2.Boolean(nullable: false),
+                    UseFB = c2.Boolean(nullable: false),
+                    UseWechat = c2.Boolean(nullable: false),
+                    AdditionalData = c2.String(),
+                    Version = c2.Binary(nullable: false, fixedLength: true, timestamp: true, storeType: "rowversion",
                             annotations: new Dictionary<string, AnnotationValues>
                             {
                                 {
                                     "ServiceTableColumn",
-                                    new AnnotationValues(oldValue: null, newValue: "RegisterType")
+                                    new AnnotationValues(oldValue: null, newValue: "Version")
                                 },
                             }),
                     CreatedAt = c2.DateTimeOffset(nullable: false, precision: 7,
@@ -98,16 +103,16 @@ namespace DailyNoteService.Migrations
                                     new AnnotationValues(oldValue: null, newValue: "UpdatedAt")
                                 },
                             }),
-                    UseGoogle = c2.String(),
-
-                    UseFB = c2.String(),
-
-                    UseWechat = c2.String(),
-
-                    AdditionalData = c2.String(),
-
+                    Deleted = c2.Boolean(nullable: false,
+                            annotations: new Dictionary<string, AnnotationValues>
+                            {
+                                {
+                                    "ServiceTableColumn",
+                                    new AnnotationValues(oldValue: null, newValue: "Deleted")
+                                },
+                            }),
                 })
-                .PrimaryKey(t2 => t2.Email)
+                .PrimaryKey(t2 => t2.Id)
                 .Index(t2 => t2.CreatedAt, clustered: true);
         }
         
@@ -115,6 +120,47 @@ namespace DailyNoteService.Migrations
         {
             DropIndex("dbo.TodoItems", new[] { "CreatedAt" });
             DropTable("dbo.TodoItems",
+                removedColumnAnnotations: new Dictionary<string, IDictionary<string, object>>
+                {
+                    {
+                        "CreatedAt",
+                        new Dictionary<string, object>
+                        {
+                            { "ServiceTableColumn", "CreatedAt" },
+                        }
+                    },
+                    {
+                        "Deleted",
+                        new Dictionary<string, object>
+                        {
+                            { "ServiceTableColumn", "Deleted" },
+                        }
+                    },
+                    {
+                        "Id",
+                        new Dictionary<string, object>
+                        {
+                            { "ServiceTableColumn", "Id" },
+                        }
+                    },
+                    {
+                        "UpdatedAt",
+                        new Dictionary<string, object>
+                        {
+                            { "ServiceTableColumn", "UpdatedAt" },
+                        }
+                    },
+                    {
+                        "Version",
+                        new Dictionary<string, object>
+                        {
+                            { "ServiceTableColumn", "Version" },
+                        }
+                    },
+                });
+
+            DropIndex("dbo.Users", new[] { "CreatedAt" });
+            DropTable("dbo.Users",
                 removedColumnAnnotations: new Dictionary<string, IDictionary<string, object>>
                 {
                     {
