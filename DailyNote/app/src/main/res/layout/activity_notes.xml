@@ -6,35 +6,60 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#304252">
+
     <RelativeLayout
+        android:id="@+id/personalBackground"
         android:layout_width="match_parent"
-        android:layout_height="180dp"
-        android:id="@+id/personalBackground">
+        android:layout_height="180dp">
+
         <LinearLayout
+            android:id="@+id/userInfo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:id="@+id/userInfo">
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/new_note"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="16dp"
+                android:background="@mipmap/create_new_note_icon"
+                android:textColor="@android:color/white" />
+
             <ImageView
+                android:id="@+id/headShot"
                 android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:id="@+id/headShot"/>
+                android:layout_height="50dp" />
+
             <TextView
+                android:id="@+id/userName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/userName"/>
+                android:text="David" />
         </LinearLayout>
+
         <ImageButton
+            android:id="@+id/settings"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:id="@+id/settings"
-            android:background="@drawable/setting"
-            android:layout_alignParentRight="true"/>
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="16dp"
+            android:background="@mipmap/setting_icon" />
+
+
     </RelativeLayout>
 
-    <ListView
+
+    <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/noteList"/>
+        android:layout_height="wrap_content"
+        android:id="@+id/notes_list">
+
+    </android.support.v7.widget.RecyclerView>
+
 
 </LinearLayout>

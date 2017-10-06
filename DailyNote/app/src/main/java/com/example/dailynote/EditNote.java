@@ -11,47 +11,31 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
-
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 
-import static java.text.DateFormat.getDateInstance;
 
-public class newNote extends Activity {
-
-    private ImageButton mic;
-    private final int REQ_CODE_SPEECH_INPUT = 100;
+public class EditNote extends Activity {
     private ImageButton backButton;
     private ImageButton recordButton;
     private TextView saveButton;
     private EditText noteTitle;
     private TextView dateCreated;
     private EditText noteContent;
-    private Note newNote;
+    private Note noteEdit;
+    private int id;
+    private final int REQ_CODE_SPEECH_INPUT = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_note);
-
-        /*microphone button: start talking*/
-        mic = (ImageButton) findViewById(R.id.edit_note_record);
-        mic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v){
-                promptSpeechInput();
-            }
-        });
         backButton = (ImageButton) findViewById(R.id.edit_note_back);
         saveButton = (TextView) findViewById(R.id.save);
         recordButton = (ImageButton) findViewById(R.id.edit_note_record);
@@ -60,21 +44,20 @@ public class newNote extends Activity {
         noteContent = (EditText) findViewById(R.id.multilineText);
 
         Intent i = getIntent();
+        id = i.getIntExtra("id", -1);
+        noteEdit = (Note) i.getSerializableExtra("note");
 
-        noteTitle.setText("");
-        noteContent.setText("");
-        Date date = Calendar.getInstance().getTime();
-        DateFormat df = new SimpleDateFormat("yyyy.MMM.dd");
-        newNote = new Note("", "", date);
-        dateCreated.setText(("Date Created: " + newNote.date));
+        noteTitle.setText(noteEdit.title);
+        dateCreated.setText("Date Created: " + noteEdit.date);
+        noteContent.setText(noteEdit.content);
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(newNote.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(EditNote.this);
                 builder.setTitle("Return Warning");
-                builder.setMessage("Do you want to return? The note will not be saved.");
-                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                builder.setMessage("Do you want to discard the changes and return?");
+                builder.setPositiveButton("Discard and Return", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         setResult(RESULT_CANCELED);
                         finish();
@@ -101,21 +84,16 @@ public class newNote extends Activity {
             @Override
             public void onClick(View view) {
                 Intent ri = new Intent();
-                newNote.title = noteTitle.getText().toString();
-                newNote.content = noteContent.getText().toString();
-                ri.putExtra("result_new_note", newNote);
+                noteEdit.title = noteTitle.getText().toString();
+                noteEdit.content = noteContent.getText().toString();
+                ri.putExtra("result_note", noteEdit);
+                ri.putExtra("result_id", id);
                 setResult(RESULT_OK, ri);
                 finish();
             }
         });
-
-
-
     }
 
-    /**
-     * Showing google speech input dialog
-     * */
     private void promptSpeechInput() {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
@@ -132,9 +110,6 @@ public class newNote extends Activity {
         }
     }
 
-    /**
-     * Receiving speech input
-     * */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -151,9 +126,5 @@ public class newNote extends Activity {
             }
 
         }
-    }
-
-    public void done(){
-
     }
 }

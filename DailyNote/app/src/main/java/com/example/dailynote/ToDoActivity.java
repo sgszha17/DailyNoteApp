@@ -86,7 +86,7 @@ public class ToDoActivity extends AppCompatActivity implements
     private ImageButton facebook_login;
     private ImageButton google_login;
     private ImageButton wechat_login;
-    private Button testButton;
+    private Button signinButton;
 
     /**
      * Mobile Service Client reference
@@ -136,8 +136,8 @@ public class ToDoActivity extends AppCompatActivity implements
         int height = dm.heightPixels;
         int width = dm.widthPixels;
 
-        testButton = (Button) findViewById(R.id.testingButton);
         mStatusTextView = (TextView) findViewById(R.id.login_status);
+        signinButton = (Button) findViewById(R.id.sign_in_button);
 
         findViewById(R.id.sign_in_button).setOnClickListener(this);
         findViewById(R.id.google).setOnClickListener(this);
