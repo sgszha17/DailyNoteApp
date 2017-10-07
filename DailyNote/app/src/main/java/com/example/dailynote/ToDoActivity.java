@@ -189,6 +189,7 @@ public class ToDoActivity extends Activity {
         loginAndRegister();
     }
 
+    @SuppressWarnings("unchecked")
     public void readData(){
         try {
             File dataFile = new File(this.getFilesDir(), "data.txt");
@@ -197,9 +198,11 @@ public class ToDoActivity extends Activity {
             Notes.data = (List<Note>) ois.readObject();
             ois.close();
         } catch (FileNotFoundException e){
+            Notes.data = null;
             Log.e("FileNotFound", e.getMessage());
         } catch (Exception e){
-            Log.e("MyException", e.getMessage());
+            Notes.data = null;
+            Log.e("MyException", "myexception");
         }
     }
 

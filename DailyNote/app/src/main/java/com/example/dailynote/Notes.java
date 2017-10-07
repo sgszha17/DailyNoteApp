@@ -370,7 +370,6 @@ public class Notes extends Activity {
             FileOutputStream fos = new FileOutputStream(dataFile);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(data);
-            oos.flush();
             oos.close();
         } catch (IOException e){
             Log.e("IOException", e.getMessage());
@@ -395,7 +394,6 @@ public class Notes extends Activity {
             FileOutputStream fos = new FileOutputStream(file);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(data);
-            oos.flush();
             oos.close();
         } catch (Exception e){
 
