@@ -85,6 +85,13 @@ public class Notes extends Activity {
 //        Intent intent = getIntent();
 //        final String[] userData = intent.getStringArrayExtra("getin");
 //        Log.d(TAG, "onCreate: Get the data is "+ userData[0]);
+        Intent intent = getIntent();
+        if (intent.getBooleanExtra("delete_all", false)){
+            deleteAll();
+        }
+        else{
+            sortData();
+        }
 
 
         background = (RelativeLayout) findViewById(R.id.personalBackground);
@@ -112,11 +119,7 @@ public class Notes extends Activity {
         userName.setText(username);
 
         recyclerView = (RecyclerView) findViewById(R.id.notes_list);
-        createDataSet();
-        readData();
-        if (data == null){
-            data = Collections.emptyList();
-        }
+
         myAdapter = new MyAdapter(this, data);
         recyclerView.setAdapter(myAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -268,6 +271,7 @@ public class Notes extends Activity {
         if(newNoteDialog != null){
             newNoteDialog.dismiss();
         }
+        writeData();
 
     }
 
@@ -344,8 +348,16 @@ public class Notes extends Activity {
 
 
     //sort entries by date
-    public void sortData(){
+    public static void sortData(){
         Collections.sort(data, Collections.reverseOrder());
+    }
+
+    public void deleteAll(){
+        List<Note> tempData = new ArrayList<>();
+        Date tempDate = new Date();
+        Note tempNote = new Note ("You have no note entries now. Go create one!", "", tempDate);
+        tempData.add(tempNote);
+        data = tempData;
     }
 
     //data IO
@@ -369,8 +381,7 @@ public class Notes extends Activity {
             File dataFile = new File(this.getFilesDir(), "data.txt");
             FileInputStream fis = new FileInputStream(dataFile);
             ObjectInputStream ois = new ObjectInputStream(fis);
-            data = (List<Note>) ois.readObject();
-            sortData();
+            Notes.data = (List<Note>) ois.readObject();
             ois.close();
         } catch (FileNotFoundException e){
             Log.e("FileNotFound", e.getMessage());

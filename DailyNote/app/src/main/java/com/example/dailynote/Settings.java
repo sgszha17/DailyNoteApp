@@ -65,6 +65,8 @@ public class Settings extends Activity {
     private EditText myaccountfield;
     private EditText mUsernamefield;
 
+    private boolean isDeletedAll;
+
     /*headImage file*/
     private static final String IMAGE_FILE_NAME = "temp_head_image.jpg";
     private Bitmap photo = null;
@@ -87,6 +89,7 @@ public class Settings extends Activity {
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
         builder.detectFileUriExposure();
+        isDeletedAll = false;
 
 //        Intent intent = getIntent();
 //        userInformation = intent.getStringArrayExtra("goToSetting");
@@ -107,6 +110,7 @@ public class Settings extends Activity {
                 // return to the main page
                 Intent intent = new Intent();
                 intent.setClass(Settings.this, Notes.class);
+                intent.putExtra("delete_all", isDeletedAll);
 //                intent.putExtra("getin",userInformation);
                 startActivity(intent);
                 Settings.this.finish();
@@ -249,7 +253,25 @@ public class Settings extends Activity {
         deleteNotesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // delete all current notes
+                AlertDialog.Builder builder = new AlertDialog.Builder(Settings.this);
+                builder.setTitle("Delete All Note Entries");
+                builder.setMessage("Are you sure you want to delete all?");
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        isDeletedAll = true;
+                        Toast.makeText(Settings.this, "Delete Success",
+                                Toast.LENGTH_LONG).show();
+                        dialog.dismiss();
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
             }
         });
 
@@ -355,9 +377,7 @@ public class Settings extends Activity {
                 transIntent_voice.putExtra("bitmap", photo);
                 startActivity(transIntent_voice);
                 // text
-                Intent transIntent_text = new Intent(Settings.this, newNoteText.class);
-                transIntent_text.putExtra("bitmap", photo);
-                startActivity(transIntent_text);
+
                 // camera
 
             }*/
