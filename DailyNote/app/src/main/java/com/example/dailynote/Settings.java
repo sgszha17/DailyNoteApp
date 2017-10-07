@@ -215,7 +215,7 @@ public class Settings extends Activity {
             @Override
             public void onClick(View view) {
                 // clear cache
-                new Thread(new clearCache()).start();
+                confirmClearCache();
             }
         });
         deleteNotesButton.setOnClickListener(new View.OnClickListener() {
@@ -258,6 +258,27 @@ public class Settings extends Activity {
                 intent.putExtra("logout",true);
                 startActivity(intent);
                 Settings.this.finish();
+            }
+        });
+        dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
+    private void confirmClearCache(){
+        AlertDialog.Builder dialog = new AlertDialog.Builder(Settings.this);
+        dialog.setTitle("Alert");
+        dialog.setMessage("Are you sure you want to clear all cache? ");
+        dialog.setCancelable(false);
+        dialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                new Thread(new clearCache()).start();
             }
         });
         dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
