@@ -14,7 +14,6 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Bundle;
-<<<<<<< HEAD
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
@@ -32,13 +31,8 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 
 import static android.content.ContentValues.TAG;
-=======
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.View;
-import android.widget.ImageButton;
-import android.widget.TextView;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -53,12 +47,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Calendar;
->>>>>>> origin/Dawei's-branch
 
 
 public class Notes extends Activity {
     private ImageButton settings;
-<<<<<<< HEAD
+    private ImageButton createNewNoteButton;
     private RelativeLayout background;
     private SensorManager sensorManager;
     private Sensor sensorAccelerometer;
@@ -75,21 +68,19 @@ public class Notes extends Activity {
     /*about taking photos*/
     private static final String IMAGE_FILE_NAME = "newphoto"+(int)System.currentTimeMillis()+".jpg";
     private static final int CODE_CAMERA_REQUEST = 0xa5;
-=======
-    private ImageButton newNoteButton;
+
     private RecyclerView recyclerView;
     private MyAdapter myAdapter;
     public static final int REQUEST_EDIT_NOTE = 1;
     public static final int REQUEST_NEW_NOTE = 2;
 
     public static List<Note> data = Collections.emptyList();
->>>>>>> origin/Dawei's-branch
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notes);
-<<<<<<< HEAD
 //        Intent intent = getIntent();
 //        final String[] userData = intent.getStringArrayExtra("getin");
 //        Log.d(TAG, "onCreate: Get the data is "+ userData[0]);
@@ -97,7 +88,6 @@ public class Notes extends Activity {
 
         background = (RelativeLayout) findViewById(R.id.personalBackground);
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        notelist = (ListView) findViewById(R.id.noteList);
 
         /*setting headShot, getting headShot from settings*/
         headShot = (RoundImageView) findViewById(R.id.headShot);
@@ -120,7 +110,6 @@ public class Notes extends Activity {
         String username = preferences.getString("username","");
         userName.setText(username);
 
-=======
         recyclerView = (RecyclerView) findViewById(R.id.notes_list);
         if(data.isEmpty()) {
             getData();
@@ -130,8 +119,11 @@ public class Notes extends Activity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         settings = (ImageButton) findViewById(R.id.settings);
-        newNoteButton = (ImageButton) findViewById(R.id.new_note);
-        newNoteButton.setOnClickListener(new View.OnClickListener() {
+
+
+        /*Jump to setting*/
+        createNewNoteButton = (ImageButton) findViewById(R.id.notes_create_new);
+        createNewNoteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent();
@@ -139,13 +131,6 @@ public class Notes extends Activity {
                 startActivityForResult(i, REQUEST_NEW_NOTE);
             }
         });
-
-
-
-
-
->>>>>>> origin/Dawei's-branch
-        /*Jump to setting*/
         settings = (ImageButton) findViewById(R.id.settings);
         settings.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -243,19 +228,17 @@ public class Notes extends Activity {
         new_text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent();
-                intent.setClass(Notes.this, newNoteText.class);
-                startActivity(intent);
-                Notes.this.finish();
+                Intent i = new Intent();
+                i.setClass(Notes.this, newNote.class);
+                startActivityForResult(i, REQUEST_NEW_NOTE);
             }
         });
         new_voice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent();
-                intent.setClass(Notes.this, newNote.class);
-                startActivity(intent);
-                Notes.this.finish();
+                Intent i = new Intent();
+                i.setClass(Notes.this, newNote.class);
+                startActivityForResult(i, REQUEST_NEW_NOTE);
             }
         });
 
@@ -272,6 +255,7 @@ public class Notes extends Activity {
     protected void onPause(){
         super.onPause();
         sensorManager.unregisterListener(sensorEventListener);
+        writeData();
         System.out.println("now here");
     }
 
@@ -296,7 +280,7 @@ public class Notes extends Activity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent intent){
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
         // no effective operation from user, return
         if(resultCode == RESULT_CANCELED){
             Toast.makeText(getApplication(), "Cancel", Toast.LENGTH_LONG).show();
@@ -311,25 +295,6 @@ public class Notes extends Activity {
                     Toast.makeText(getApplication(), "No SdCard", Toast.LENGTH_LONG).show();
                 }
                 break;
-        }
-        super.onActivityResult(requestCode, resultCode, intent);
-    }
-
-    public Drawable loadDrawable(){
-        Drawable image = null;
-        SharedPreferences share = getSharedPreferences("ThumbLock", MODE_PRIVATE);
-        String temp = share.getString("P", "");
-        if(temp != null){
-            ByteArrayInputStream is = new ByteArrayInputStream(android.util.Base64.decode
-                    (temp.getBytes(), android.util.Base64.DEFAULT));
-            image = Drawable.createFromStream(is, "");
-        }
-        return image;
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
-        switch (requestCode){
             case REQUEST_EDIT_NOTE:
                 if (resultCode == RESULT_OK){
                     int id = data.getIntExtra("result_id", -1);
@@ -352,7 +317,21 @@ public class Notes extends Activity {
             default:
                 break;
         }
+        super.onActivityResult(requestCode, resultCode, data);
     }
+
+    public Drawable loadDrawable(){
+        Drawable image = null;
+        SharedPreferences share = getSharedPreferences("ThumbLock", MODE_PRIVATE);
+        String temp = share.getString("P", "");
+        if(temp != null){
+            ByteArrayInputStream is = new ByteArrayInputStream(android.util.Base64.decode
+                    (temp.getBytes(), android.util.Base64.DEFAULT));
+            image = Drawable.createFromStream(is, "");
+        }
+        return image;
+    }
+
 
     @Override
     protected void onStop() {
@@ -360,11 +339,6 @@ public class Notes extends Activity {
         writeData();
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        writeData();
-    }
 
     //sort entries by date
     public void sortData(){

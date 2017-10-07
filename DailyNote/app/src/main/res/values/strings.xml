@@ -24,5 +24,7 @@
     <string name="chooseAlbum">Choose from Album</string>
     <string name="createNote">Create New Note</string>
     <string name="inputText">Input your note</string>
+    <string name="speech_prompt">Speak</string>
+    <string name="speech_not_supported">Android Speech is not supported</string>
 
 </resources>

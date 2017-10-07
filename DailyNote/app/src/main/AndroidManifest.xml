@@ -21,13 +21,15 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
-        <activity android:name=".ToDoActivity"></activity>
-        <activity android:name=".Notes">
+        <activity android:name=".ToDoActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".Notes">
+
         </activity>
         <activity android:name=".Settings"></activity>
         <activity android:name=".newNote"></activity>
