@@ -45,6 +45,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Calendar;
 
@@ -111,8 +112,10 @@ public class Notes extends Activity {
         userName.setText(username);
 
         recyclerView = (RecyclerView) findViewById(R.id.notes_list);
-        if(data.isEmpty()) {
-            getData();
+        createDataSet();
+        readData();
+        if (data == null){
+            data = Collections.emptyList();
         }
         myAdapter = new MyAdapter(this, data);
         recyclerView.setAdapter(myAdapter);
@@ -342,7 +345,7 @@ public class Notes extends Activity {
 
     //sort entries by date
     public void sortData(){
-        Collections.sort(data);
+        Collections.sort(data, Collections.reverseOrder());
     }
 
     //data IO
@@ -367,11 +370,34 @@ public class Notes extends Activity {
             FileInputStream fis = new FileInputStream(dataFile);
             ObjectInputStream ois = new ObjectInputStream(fis);
             data = (List<Note>) ois.readObject();
+            sortData();
             ois.close();
         } catch (FileNotFoundException e){
             Log.e("FileNotFound", e.getMessage());
         } catch (Exception e){
             Log.e("MyException", e.getMessage());
+        }
+    }
+
+    public void createDataSet(){
+        try {
+            List<Note> data = new ArrayList<>();
+            for (int i = 0;i<3;i++){
+                Date d = new Date();
+                Note tempNote = new Note(Integer.toString(i), Integer.toString(i), d);
+                data.add(tempNote);
+            }
+            Date d= new Date(2017, 9, 25);
+            Note tempNote = new Note("4", "4", d);
+            data.add(tempNote);
+            File file = new File(this.getFilesDir(), "data.txt");
+            FileOutputStream fos = new FileOutputStream(file);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(data);
+            oos.flush();
+            oos.close();
+        } catch (Exception e){
+
         }
     }
 
