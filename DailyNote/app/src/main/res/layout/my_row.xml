@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:background="@drawable/itemborder">
+    <TextView
+        android:padding="8dp"
+        android:id="@+id/note_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="16dp"
+        android:layout_weight="0.2"
+        android:text="Date"/>
+    <TextView
+        android:padding="8dp"
+        android:id="@+id/note_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="16dp"
+        android:layout_weight="0.8"
+        android:text="title"/>
+
+    <ImageView
+        android:id="@+id/delete_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:padding="8dp"
+        android:layout_marginLeft="16dp"
+        android:src="@mipmap/ic_launcher" />
+
+</LinearLayout>
