@@ -54,22 +54,29 @@ public class EditNote extends Activity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(EditNote.this);
-                builder.setTitle("Return Warning");
-                builder.setMessage("Do you want to discard the changes and return?");
-                builder.setPositiveButton("Discard and Return", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        setResult(RESULT_CANCELED);
-                        finish();
-                    }
-                });
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.dismiss();
-                    }
-                });
-                AlertDialog dialog = builder.create();
-                dialog.show();
+
+                if (isModified()) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(EditNote.this);
+                    builder.setTitle("Return Warning");
+                    builder.setMessage("You have unsaved changes. Do you want to discard the changes and return?");
+                    builder.setPositiveButton("Discard and Return", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            setResult(RESULT_CANCELED);
+                            finish();
+                        }
+                    });
+                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.dismiss();
+                        }
+                    });
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                }
+                else {
+                    setResult(RESULT_CANCELED);
+                    finish();
+                }
             }
         });
 
@@ -96,6 +103,13 @@ public class EditNote extends Activity {
                 finish();
             }
         });
+    }
+
+    public boolean isModified(){
+        if (!noteTitle.getText().toString().equals(noteEdit.title)||!noteContent.getText().toString().equals(noteEdit.content)){
+            return true;
+        }
+        return false;
     }
 
     private void promptSpeechInput() {

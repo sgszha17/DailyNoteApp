@@ -70,22 +70,29 @@ public class newNote extends Activity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(newNote.this);
-                builder.setTitle("Return Warning");
-                builder.setMessage("Do you want to return? The note will not be saved.");
-                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        setResult(RESULT_CANCELED);
-                        finish();
-                    }
-                });
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.dismiss();
-                    }
-                });
-                AlertDialog dialog = builder.create();
-                dialog.show();
+
+                if (isModified()) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(newNote.this);
+                    builder.setTitle("Return Warning");
+                    builder.setMessage("You have unsaved changes. Do you want to return? The note will not be saved.");
+                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            setResult(RESULT_CANCELED);
+                            finish();
+                        }
+                    });
+                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.dismiss();
+                        }
+                    });
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                }
+                else {
+                    setResult(RESULT_CANCELED);
+                    finish();
+                }
             }
         });
 
@@ -114,6 +121,13 @@ public class newNote extends Activity {
 
 
 
+    }
+
+    public boolean isModified(){
+        if (!noteTitle.getText().toString().equals(newNote.title)||!noteContent.getText().toString().equals(newNote.content)){
+            return true;
+        }
+        return false;
     }
 
     /**

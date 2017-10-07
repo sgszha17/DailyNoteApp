@@ -145,7 +145,6 @@ public class Notes extends Activity {
                 intent.setClass(Notes.this, Settings.class);
 //                intent.putExtra("goToSetting",userData);
                 startActivity(intent);
-               // writeData();
                 Notes.this.finish();
 
             }
