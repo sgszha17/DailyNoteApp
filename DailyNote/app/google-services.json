@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "219374262584",
+    "project_id": "aerial-garden-166807"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:219374262584:android:a995985589ef7a7f",
+        "android_client_info": {
+          "package_name": "com.example.dailynote"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "219374262584-67sonhj0teuo07u3c7sf4tgke82893g3.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "219374262584-37fask1drdgs8tjgm0l314u65jucoeh0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.dailynote",
+            "certificate_hash": "643a70ddf530170e6cd38f9b091af18f7c8ea639"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBc66b6fZGZMPiFzJWRCCFPd_EpR_pbCwo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

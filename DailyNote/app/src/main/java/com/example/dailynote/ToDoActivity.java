@@ -172,7 +172,7 @@ public class ToDoActivity extends FragmentActivity implements
         google_login.setOnClickListener(this);
         /* google play initialize*/
 
-        
+
 
         wechat_login = (ImageButton) findViewById(R.id.wechat);
         wechat_login.setOnClickListener(this);
