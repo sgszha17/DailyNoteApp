@@ -44,9 +44,9 @@ public class Notes extends Activity {
     private AlertDialog.Builder builder;
     private AlertDialog newNoteDialog;
 
-    // 两次检测的时间间隔
+    // time interval between 2 detecting
     private static final int UPTATE_INTERVAL_TIME = 1000;
-    // 加速度变化阈值，当摇晃速度达到这值后产生作用
+    // speed threshold for accelerometer sensor
     private static final int SPEED_THRESHOLD = 100;
     /*about taking photos*/
     private static final String IMAGE_FILE_NAME = "newphoto"+(int)System.currentTimeMillis()+".jpg";
@@ -73,12 +73,6 @@ public class Notes extends Activity {
             BitmapDrawable bp = (BitmapDrawable) image;
             headShot.setImageBitmap(bp.getBitmap());
         }
-        /*
-        Intent headshotIntent = getIntent();
-        if(headshotIntent != null){
-            Bitmap bitmap = headshotIntent.getParcelableExtra("bitmap");
-            headShot.setImageBitmap(bitmap);
-        }*/
 
         /*setting userName*/
         userName = (TextView) findViewById(R.id.userName);
@@ -124,18 +118,15 @@ public class Notes extends Activity {
             }
             lastUpdateTime = currentUpdateTime;
             float[] values = sensorEvent.values;
-
-            // 获得x,y,z加速度
+            // get x,y,z accelerated speed
             float x = values[0];
             float y = values[1];
             float z = values[2];
-
-            // 获得x,y,z加速度的变化值
+            // get changed value of x, y, z
             float deltaX = x - lastX;
             float deltaY = y - lastY;
             float deltaZ = z - lastZ;
-
-            // 将现在的坐标变成last坐标
+            // update 'last' coordinate
             lastX = x;
             lastY = y;
             lastZ = z;
@@ -149,8 +140,6 @@ public class Notes extends Activity {
 
         @Override
         public void onAccuracyChanged(Sensor s, int accuracy){}
-
-
     };
 
     Handler handler = new Handler(){
@@ -166,7 +155,6 @@ public class Notes extends Activity {
 
     private void createNewNoteDialog(){
         builder = new AlertDialog.Builder(this);
-        //builder.setTitle(R.string.createNote);
         RelativeLayout newNoteDialog_layuot = (RelativeLayout) getLayoutInflater().inflate(R.layout.create_newnote_pop, null);
         builder.setView(newNoteDialog_layuot);
         builder.setCancelable(true);
@@ -247,7 +235,6 @@ public class Notes extends Activity {
             case CODE_CAMERA_REQUEST:
                 if(Settings.hasSdcard()){
                     File tempFile = new File(Environment.getExternalStorageDirectory(), IMAGE_FILE_NAME);
-                    //cropPhoto(Uri.fromFile(tempFile), 1, 1, head_output_x, head_output_y);
                 } else{
                     Toast.makeText(getApplication(), "No SdCard", Toast.LENGTH_LONG).show();
                 }

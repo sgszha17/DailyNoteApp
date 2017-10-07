@@ -83,7 +83,7 @@ public class Settings extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        // android 7.0系统解决拍照的问题
+        // android 7.0 system resolve permission issue
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
         builder.detectFileUriExposure();
@@ -341,26 +341,6 @@ public class Settings extends Activity {
             String imagebase64 = new String(android.util.Base64.encodeToString(os.toByteArray(), android.util.Base64.DEFAULT));
             editor.putString("P", imagebase64);
             editor.commit();
-
-            /*trans headImage to other activity*/
-            /*
-            if(photo != null){
-                // noteList page
-                Intent transIntent = new Intent(Settings.this, Notes.class);
-                transIntent.putExtra("bitmap", photo);
-                startActivity(transIntent);
-                // new Note page
-                // voice
-                Intent transIntent_voice = new Intent(Settings.this, newNote.class);
-                transIntent_voice.putExtra("bitmap", photo);
-                startActivity(transIntent_voice);
-                // text
-                Intent transIntent_text = new Intent(Settings.this, newNoteText.class);
-                transIntent_text.putExtra("bitmap", photo);
-                startActivity(transIntent_text);
-                // camera
-
-            }*/
         }
     }
 

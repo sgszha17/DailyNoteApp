@@ -54,7 +54,6 @@ import com.squareup.okhttp.OkHttpClient;
 import static android.content.ContentValues.TAG;
 
 public class ToDoActivity extends Activity {
-    /*Changed by Tong Zou*/
     private LinearLayout mainLayout;
     private TextView appName;
     private AssetManager assetManager;
@@ -138,24 +137,12 @@ public class ToDoActivity extends Activity {
             }
         });
 
-//        testButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent();
-//                intent.setClass(ToDoActivity.this, Notes.class);
-//                startActivity(intent);
-//                ToDoActivity.this.finish();
-//
-//            }
-//        });
-
         progressBar = (ProgressBar) findViewById(R.id.loadingProgressBar);
 
 
 
         try {
             // Create the Mobile Service Client instance, using the provided
-
             // Mobile Service URL and key
             mClient = new MobileServiceClient(
                     "https://dailynote.azurewebsites.net",
