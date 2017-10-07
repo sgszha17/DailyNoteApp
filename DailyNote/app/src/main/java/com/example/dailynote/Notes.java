@@ -86,7 +86,7 @@ public class Notes extends Activity {
 
         //read data
         Intent intent = getIntent();
-        data = (List<Note>) intent.getSerializableExtra("data");
+        readData();
         if (intent.getBooleanExtra("delete_all", false)){
             deleteAll();
         }
@@ -145,6 +145,7 @@ public class Notes extends Activity {
                 intent.setClass(Notes.this, Settings.class);
 //                intent.putExtra("goToSetting",userData);
                 startActivity(intent);
+               // writeData();
                 Notes.this.finish();
 
             }

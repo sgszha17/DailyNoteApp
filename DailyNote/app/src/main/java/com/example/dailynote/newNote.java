@@ -100,7 +100,11 @@ public class newNote extends Activity {
             @Override
             public void onClick(View view) {
                 Intent ri = new Intent();
-                newNote.title = noteTitle.getText().toString();
+                if (noteTitle.getText().toString().equals("")){
+                    newNote.title = "Untitled";
+                }else {
+                    newNote.title = noteTitle.getText().toString();
+                }
                 newNote.content = noteContent.getText().toString();
                 ri.putExtra("result_new_note", newNote);
                 setResult(RESULT_OK, ri);

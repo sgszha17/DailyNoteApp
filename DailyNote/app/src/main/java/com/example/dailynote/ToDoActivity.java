@@ -110,7 +110,6 @@ public class ToDoActivity extends Activity {
         exist = false;
         Intent intent = getIntent();
         logOut = intent.getBooleanExtra("logout",false);
-        readData();
 
         mainLayout = (LinearLayout) findViewById(R.id.mainLayout);
         mainLayout.setBackgroundColor(Color.rgb(48, 66,82));
@@ -181,36 +180,6 @@ public class ToDoActivity extends Activity {
         loginAndRegister();
     }
 
-    @SuppressWarnings("unchecked")
-    public void readData() {
-        try {
-            File dataFile = new File(this.getFilesDir(), "data.txt");
-            if (dataFile.exists()) {
-                FileInputStream fis = new FileInputStream(dataFile);
-                ObjectInputStream ois = new ObjectInputStream(fis);
-                this.data = (List<Note>) ois.readObject();
-                ois.close();
-            } else {
-                this.data = new ArrayList<>();
-            }
-        } catch (FileNotFoundException e) {
-            this.data = new ArrayList<>();
-            Log.e(Notes.MYTAG, e.getMessage());
-        } catch (IOException ioe) {
-            this.data = new ArrayList<>();
-            String msg;
-            if (ioe.getMessage() == null){
-                msg = "no exception message";
-            }
-            else{
-                msg = ioe.getMessage();
-            }
-            Log.e(Notes.MYTAG, msg);
-        } catch (Exception e) {
-            this.data = new ArrayList<>();
-            Log.e(Notes.MYTAG, e.getMessage());
-        }
-    }
 
 
 

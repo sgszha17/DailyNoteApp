@@ -84,7 +84,11 @@ public class EditNote extends Activity {
             @Override
             public void onClick(View view) {
                 Intent ri = new Intent();
-                noteEdit.title = noteTitle.getText().toString();
+                if (noteTitle.getText().toString().equals("")){
+                    noteEdit.title = "Untitled";
+                }else {
+                    noteEdit.title = noteTitle.getText().toString();
+                }
                 noteEdit.content = noteContent.getText().toString();
                 ri.putExtra("result_note", noteEdit);
                 ri.putExtra("result_id", id);
