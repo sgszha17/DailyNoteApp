@@ -64,7 +64,6 @@ public class newNote extends Activity {
         noteTitle.setText("");
         noteContent.setText("");
         Date date = Calendar.getInstance().getTime();
-        DateFormat df = new SimpleDateFormat("yyyy.MMM.dd");
         newNote = new Note("", "", date);
         dateCreated.setText(("Date Created: " + newNote.date));
 

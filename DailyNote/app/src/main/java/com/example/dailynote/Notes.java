@@ -44,6 +44,7 @@ import java.io.ObjectOutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -58,7 +59,6 @@ public class Notes extends Activity {
     private Sensor sensorAccelerometer;
     private RoundImageView headShot;
     private TextView userName;
-    private ListView notelist;
     private AlertDialog.Builder builder;
     private AlertDialog newNoteDialog;
 
@@ -75,26 +75,29 @@ public class Notes extends Activity {
     public static final int REQUEST_EDIT_NOTE = 1;
     public static final int REQUEST_NEW_NOTE = 2;
 
-    public static List<Note> data = Collections.emptyList();
+    private List<Note> data = new ArrayList<>();
+    public static final String MYTAG = "David";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notes);
-//        Intent intent = getIntent();
-//        final String[] userData = intent.getStringArrayExtra("getin");
-//        Log.d(TAG, "onCreate: Get the data is "+ userData[0]);
+
+        //read data
         Intent intent = getIntent();
+        data = (List<Note>) intent.getSerializableExtra("data");
         if (intent.getBooleanExtra("delete_all", false)){
             deleteAll();
         }
-        else{
-            if (data == null||data.isEmpty()){
-                deleteAll();
-            }
+
+        if (this.data != null){
             sortData();
         }
+        else{
+            this.data = new ArrayList<>();
+        }
+
 
 
         background = (RelativeLayout) findViewById(R.id.personalBackground);
@@ -115,8 +118,8 @@ public class Notes extends Activity {
         String username = preferences.getString("username","");
         userName.setText(username);
 
+        //initilize recyclerview
         recyclerView = (RecyclerView) findViewById(R.id.notes_list);
-
         myAdapter = new MyAdapter(this, data);
         recyclerView.setAdapter(myAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -295,7 +298,7 @@ public class Notes extends Activity {
             case REQUEST_EDIT_NOTE:
                 if (resultCode == RESULT_OK){
                     int id = data.getIntExtra("result_id", -1);
-                    Notes.data.set(id, (Note) data.getSerializableExtra("result_note"));
+                    this.data.set(id, (Note) data.getSerializableExtra("result_note"));
                     myAdapter.notifyItemChanged(id);
                 }
                 if (resultCode == RESULT_CANCELED){
@@ -304,7 +307,7 @@ public class Notes extends Activity {
                 break;
             case REQUEST_NEW_NOTE:
                 if (resultCode == RESULT_OK){
-                    Notes.data.add(0, (Note) data.getSerializableExtra("result_new_note"));
+                    this.data.add(0, (Note) data.getSerializableExtra("result_new_note"));
                     myAdapter.notifyItemInserted(0);
                 }
                 if (resultCode == RESULT_CANCELED){
@@ -314,7 +317,6 @@ public class Notes extends Activity {
             default:
                 break;
         }
-        super.onActivityResult(requestCode, resultCode, data);
     }
 
     public Drawable loadDrawable(){
@@ -338,8 +340,10 @@ public class Notes extends Activity {
 
 
     //sort entries by date
-    public static void sortData(){
-        Collections.sort(data, Collections.reverseOrder());
+    public void sortData(){
+        if (!this.data.isEmpty()) {
+            Collections.sort(this.data, Collections.reverseOrder());
+        }
     }
 
     public void deleteAll(){
@@ -350,13 +354,44 @@ public class Notes extends Activity {
         data = tempData;
     }
 
+    @SuppressWarnings("unchecked")
+    public void readData() {
+        try {
+            File dataFile = new File(this.getFilesDir(), "data.txt");
+            if (dataFile.exists()) {
+                FileInputStream fis = new FileInputStream(dataFile);
+                ObjectInputStream ois = new ObjectInputStream(fis);
+                this.data = (List<Note>) ois.readObject();
+                ois.close();
+            } else {
+                this.data = new ArrayList<>();
+            }
+        } catch (FileNotFoundException e) {
+            this.data = new ArrayList<>();
+            Log.e(Notes.MYTAG, e.getMessage());
+        } catch (IOException ioe) {
+            this.data = new ArrayList<>();
+            String msg;
+            if (ioe.getMessage() == null){
+                msg = "no exception message";
+            }
+            else{
+                msg = ioe.getMessage();
+            }
+            Log.e(Notes.MYTAG, msg);
+        } catch (Exception e) {
+            this.data = new ArrayList<>();
+            Log.e(Notes.MYTAG, e.getMessage());
+        }
+    }
+
     //data IO
     public void writeData(){
         try {
             File dataFile = new File(this.getFilesDir(), "data.txt");
             FileOutputStream fos = new FileOutputStream(dataFile);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(data);
+            oos.writeObject(this.data);
             oos.close();
         } catch (IOException e){
             Log.e("IOException", e.getMessage());
@@ -388,7 +423,7 @@ public class Notes extends Activity {
     }
 
 
-    public static void getData(){
+    public void getData(){
         List<Note> data = new ArrayList<>();
         String[] dates = {"9.12", "12.30", "2.3","9.15"};
         String[] titles = {"first", "wdajuidabnwduiadbnqa2ue", "123ieobn12ioncqwoifnqwfon", "last"};
@@ -401,6 +436,6 @@ public class Notes extends Activity {
             current.content = contents[i];
             data.add(current);
         }
-        Notes.data = data;
+        this.data = data;
     }
 }

@@ -19,7 +19,6 @@ public class Note implements Comparable<Note>, Serializable{
     DateFormat df = new SimpleDateFormat("yyyy.MMM.dd");
 
     public Note(){
-
     }
 
     public Note(String title, String content, Date d) {
@@ -32,6 +31,8 @@ public class Note implements Comparable<Note>, Serializable{
 
     @Override
     public int compareTo(Note o) {
+        if (d == null || o.d == null)
+            return 0;
         return d.compareTo(o.d);
     }
 }

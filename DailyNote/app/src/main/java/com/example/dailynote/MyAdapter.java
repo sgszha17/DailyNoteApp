@@ -15,16 +15,19 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import android.util.Log;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
     private LayoutInflater inflater;
     private Context mContext;
+    private List<Note> data = new ArrayList<>();
 
     public MyAdapter(Context context, List<Note> data) {
         inflater = LayoutInflater.from(context);
         this.mContext = context;
+        this.data = data;
     }
 
     @Override
@@ -36,20 +39,20 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
 
     @Override
     public void onBindViewHolder(MyAdapter.MyViewHolder holder, int position) {
-        Note current = Notes.data.get(position);
+        Note current = this.data.get(position);
         holder.date.setText(current.date);
         holder.title.setText(current.title);
 
     }
 
     public void delete(int position){
-        Notes.data.remove(position);
+        this.data.remove(position);
         notifyItemRemoved(position);
     }
 
     @Override
     public int getItemCount() {
-        return Notes.data.size();
+        return this.data.size();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -78,7 +81,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
                      */
                     Intent i = new Intent(mContext, EditNote.class);
                     i.putExtra("id", getAdapterPosition());
-                    i.putExtra("note", Notes.data.get(getAdapterPosition()));
+                    i.putExtra("note", data.get(getAdapterPosition()));
                     ((Activity) mContext).startActivityForResult(i, Notes.REQUEST_EDIT_NOTE);
                     break;
             }

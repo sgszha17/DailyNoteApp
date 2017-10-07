@@ -4,9 +4,12 @@ package com.example.dailynote;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -68,6 +71,8 @@ public class ToDoActivity extends Activity {
     private ImageButton google_login;
     private ImageButton wechat_login;
 
+    private List<Note> data;
+
     private RegisterDialog registerDialog;
     private String mUsername="";
     private String mEmail="";
@@ -102,10 +107,10 @@ public class ToDoActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_to_do);
-        readData();
         exist = false;
         Intent intent = getIntent();
         logOut = intent.getBooleanExtra("logout",false);
+        readData();
 
         mainLayout = (LinearLayout) findViewById(R.id.mainLayout);
         mainLayout.setBackgroundColor(Color.rgb(48, 66,82));
@@ -177,21 +182,37 @@ public class ToDoActivity extends Activity {
     }
 
     @SuppressWarnings("unchecked")
-    public void readData(){
+    public void readData() {
         try {
             File dataFile = new File(this.getFilesDir(), "data.txt");
-            FileInputStream fis = new FileInputStream(dataFile);
-            ObjectInputStream ois = new ObjectInputStream(fis);
-            Notes.data = (List<Note>) ois.readObject();
-            ois.close();
-        } catch (FileNotFoundException e){
-            Notes.data = null;
-            Log.e("FileNotFound", e.getMessage());
-        } catch (Exception e){
-            Notes.data = null;
-            Log.e("MyException", "myexception");
+            if (dataFile.exists()) {
+                FileInputStream fis = new FileInputStream(dataFile);
+                ObjectInputStream ois = new ObjectInputStream(fis);
+                this.data = (List<Note>) ois.readObject();
+                ois.close();
+            } else {
+                this.data = new ArrayList<>();
+            }
+        } catch (FileNotFoundException e) {
+            this.data = new ArrayList<>();
+            Log.e(Notes.MYTAG, e.getMessage());
+        } catch (IOException ioe) {
+            this.data = new ArrayList<>();
+            String msg;
+            if (ioe.getMessage() == null){
+                msg = "no exception message";
+            }
+            else{
+                msg = ioe.getMessage();
+            }
+            Log.e(Notes.MYTAG, msg);
+        } catch (Exception e) {
+            this.data = new ArrayList<>();
+            Log.e(Notes.MYTAG, e.getMessage());
         }
     }
+
+
 
     public void login(){
         try {
@@ -218,6 +239,7 @@ public class ToDoActivity extends Activity {
         Toast.makeText(ToDoActivity.this,"Login succeed",Toast.LENGTH_SHORT).show();
         storeUserLoginInformationOnLocal(currentUser);
         Intent intent = new Intent();
+        intent.putExtra("data", (Serializable) data);
         intent.setClass(ToDoActivity.this, Notes.class);
         Log.d(TAG, "loginSucceed: Username is "+mUsername);
         Log.d(TAG, "loginSucceed: password is "+mPassword);
