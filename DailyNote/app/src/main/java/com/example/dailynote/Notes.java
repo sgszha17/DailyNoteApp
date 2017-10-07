@@ -31,10 +31,28 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 
 import static android.content.ContentValues.TAG;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Calendar;
 
 
 public class Notes extends Activity {
     private ImageButton settings;
+    private ImageButton createNewNoteButton;
     private RelativeLayout background;
     private SensorManager sensorManager;
     private Sensor sensorAccelerometer;
@@ -52,6 +70,14 @@ public class Notes extends Activity {
     private static final String IMAGE_FILE_NAME = "newphoto"+(int)System.currentTimeMillis()+".jpg";
     private static final int CODE_CAMERA_REQUEST = 0xa5;
 
+    private RecyclerView recyclerView;
+    private MyAdapter myAdapter;
+    public static final int REQUEST_EDIT_NOTE = 1;
+    public static final int REQUEST_NEW_NOTE = 2;
+
+    public static List<Note> data = Collections.emptyList();
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,11 +85,20 @@ public class Notes extends Activity {
 //        Intent intent = getIntent();
 //        final String[] userData = intent.getStringArrayExtra("getin");
 //        Log.d(TAG, "onCreate: Get the data is "+ userData[0]);
+        Intent intent = getIntent();
+        if (intent.getBooleanExtra("delete_all", false)){
+            deleteAll();
+        }
+        else{
+            if (data == null||data.isEmpty()){
+                deleteAll();
+            }
+            sortData();
+        }
 
 
         background = (RelativeLayout) findViewById(R.id.personalBackground);
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        notelist = (ListView) findViewById(R.id.noteList);
 
         /*setting headShot, getting headShot from settings*/
         headShot = (RoundImageView) findViewById(R.id.headShot);
@@ -80,7 +115,25 @@ public class Notes extends Activity {
         String username = preferences.getString("username","");
         userName.setText(username);
 
+        recyclerView = (RecyclerView) findViewById(R.id.notes_list);
+
+        myAdapter = new MyAdapter(this, data);
+        recyclerView.setAdapter(myAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        settings = (ImageButton) findViewById(R.id.settings);
+
+
         /*Jump to setting*/
+        createNewNoteButton = (ImageButton) findViewById(R.id.notes_create_new);
+        createNewNoteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent();
+                i.setClass(Notes.this, newNote.class);
+                startActivityForResult(i, REQUEST_NEW_NOTE);
+            }
+        });
         settings = (ImageButton) findViewById(R.id.settings);
         settings.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -172,19 +225,17 @@ public class Notes extends Activity {
         new_text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent();
-                intent.setClass(Notes.this, newNoteText.class);
-                startActivity(intent);
-                Notes.this.finish();
+                Intent i = new Intent();
+                i.setClass(Notes.this, newNote.class);
+                startActivityForResult(i, REQUEST_NEW_NOTE);
             }
         });
         new_voice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent();
-                intent.setClass(Notes.this, newNote.class);
-                startActivity(intent);
-                Notes.this.finish();
+                Intent i = new Intent();
+                i.setClass(Notes.this, newNote.class);
+                startActivityForResult(i, REQUEST_NEW_NOTE);
             }
         });
 
@@ -201,6 +252,7 @@ public class Notes extends Activity {
     protected void onPause(){
         super.onPause();
         sensorManager.unregisterListener(sensorEventListener);
+        writeData();
         System.out.println("now here");
     }
 
@@ -210,6 +262,7 @@ public class Notes extends Activity {
         if(newNoteDialog != null){
             newNoteDialog.dismiss();
         }
+        writeData();
 
     }
 
@@ -225,7 +278,7 @@ public class Notes extends Activity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent intent){
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
         // no effective operation from user, return
         if(resultCode == RESULT_CANCELED){
             Toast.makeText(getApplication(), "Cancel", Toast.LENGTH_LONG).show();
@@ -239,8 +292,29 @@ public class Notes extends Activity {
                     Toast.makeText(getApplication(), "No SdCard", Toast.LENGTH_LONG).show();
                 }
                 break;
+            case REQUEST_EDIT_NOTE:
+                if (resultCode == RESULT_OK){
+                    int id = data.getIntExtra("result_id", -1);
+                    Notes.data.set(id, (Note) data.getSerializableExtra("result_note"));
+                    myAdapter.notifyItemChanged(id);
+                }
+                if (resultCode == RESULT_CANCELED){
+                    break;
+                }
+                break;
+            case REQUEST_NEW_NOTE:
+                if (resultCode == RESULT_OK){
+                    Notes.data.add(0, (Note) data.getSerializableExtra("result_new_note"));
+                    myAdapter.notifyItemInserted(0);
+                }
+                if (resultCode == RESULT_CANCELED){
+                    break;
+                }
+                break;
+            default:
+                break;
         }
-        super.onActivityResult(requestCode, resultCode, intent);
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     public Drawable loadDrawable(){
@@ -253,5 +327,82 @@ public class Notes extends Activity {
             image = Drawable.createFromStream(is, "");
         }
         return image;
+    }
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        writeData();
+    }
+
+
+    //sort entries by date
+    public static void sortData(){
+        Collections.sort(data, Collections.reverseOrder());
+    }
+
+    public void deleteAll(){
+        List<Note> tempData = new ArrayList<>();
+        Date tempDate = new Date();
+        Note tempNote = new Note ("You have no note entries now. Go create one!", "", tempDate);
+        tempData.add(tempNote);
+        data = tempData;
+    }
+
+    //data IO
+    public void writeData(){
+        try {
+            File dataFile = new File(this.getFilesDir(), "data.txt");
+            FileOutputStream fos = new FileOutputStream(dataFile);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(data);
+            oos.flush();
+            oos.close();
+        } catch (IOException e){
+            Log.e("IOException", e.getMessage());
+        } catch (Exception e){
+            Log.e("MyException", e.getMessage());
+        }
+    }
+
+
+    public void createDataSet(){
+        try {
+            List<Note> data = new ArrayList<>();
+            for (int i = 0;i<3;i++){
+                Date d = new Date();
+                Note tempNote = new Note(Integer.toString(i), Integer.toString(i), d);
+                data.add(tempNote);
+            }
+            Date d= new Date(2017, 9, 25);
+            Note tempNote = new Note("4", "4", d);
+            data.add(tempNote);
+            File file = new File(this.getFilesDir(), "data.txt");
+            FileOutputStream fos = new FileOutputStream(file);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(data);
+            oos.flush();
+            oos.close();
+        } catch (Exception e){
+
+        }
+    }
+
+
+    public static void getData(){
+        List<Note> data = new ArrayList<>();
+        String[] dates = {"9.12", "12.30", "2.3","9.15"};
+        String[] titles = {"first", "wdajuidabnwduiadbnqa2ue", "123ieobn12ioncqwoifnqwfon", "last"};
+        String[] contents = {"I am content number 1.", "I am content number 2.", "I am content number 3.", "lalala"};
+
+        for (int i = 0; i<dates.length; i++){
+            Note current = new Note();
+            current.date = dates[i];
+            current.title = titles[i];
+            current.content = contents[i];
+            data.add(current);
+        }
+        Notes.data = data;
     }
 }

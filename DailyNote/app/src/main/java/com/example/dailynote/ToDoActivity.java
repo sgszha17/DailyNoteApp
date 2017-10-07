@@ -1,7 +1,12 @@
 package com.example.dailynote;
 
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.ObjectInputStream;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -97,6 +102,7 @@ public class ToDoActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_to_do);
+        readData();
         exist = false;
         Intent intent = getIntent();
         logOut = intent.getBooleanExtra("logout",false);
@@ -168,6 +174,20 @@ public class ToDoActivity extends Activity {
         //Get the Mobile Service Table instance to use
         user = mClient.getTable(Users.class);
         loginAndRegister();
+    }
+
+    public void readData(){
+        try {
+            File dataFile = new File(this.getFilesDir(), "data.txt");
+            FileInputStream fis = new FileInputStream(dataFile);
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            Notes.data = (List<Note>) ois.readObject();
+            ois.close();
+        } catch (FileNotFoundException e){
+            Log.e("FileNotFound", e.getMessage());
+        } catch (Exception e){
+            Log.e("MyException", e.getMessage());
+        }
     }
 
     public void login(){

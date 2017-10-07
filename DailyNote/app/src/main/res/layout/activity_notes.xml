@@ -43,6 +43,14 @@
         <ImageButton
             android:layout_width="35dp"
             android:layout_height="35dp"
+            android:id="@+id/notes_create_new"
+            android:background="@mipmap/opacious_create_icon"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="8dp"
+            />
+        <ImageButton
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:id="@+id/settings"
             android:background="@drawable/setting"
             android:layout_marginTop="8dp"
@@ -51,9 +59,11 @@
             android:layout_alignParentTop="true"/>
     </RelativeLayout>
 
-    <ListView
+    <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/noteList"/>
+        android:layout_height="wrap_content"
+        android:id="@+id/notes_list">
+
+    </android.support.v7.widget.RecyclerView>
 
 </LinearLayout>
