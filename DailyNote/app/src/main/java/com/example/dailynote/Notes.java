@@ -90,6 +90,9 @@ public class Notes extends Activity {
             deleteAll();
         }
         else{
+            if (data == null){
+                deleteAll();
+            }
             sortData();
         }
 
@@ -376,19 +379,6 @@ public class Notes extends Activity {
         }
     }
 
-    public void readData(){
-        try {
-            File dataFile = new File(this.getFilesDir(), "data.txt");
-            FileInputStream fis = new FileInputStream(dataFile);
-            ObjectInputStream ois = new ObjectInputStream(fis);
-            Notes.data = (List<Note>) ois.readObject();
-            ois.close();
-        } catch (FileNotFoundException e){
-            Log.e("FileNotFound", e.getMessage());
-        } catch (Exception e){
-            Log.e("MyException", e.getMessage());
-        }
-    }
 
     public void createDataSet(){
         try {
