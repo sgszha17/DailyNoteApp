@@ -13,6 +13,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -45,13 +46,6 @@ public class Settings extends Activity {
     private TextView accountText;
     private TextView nameText;
 
-    private TextView sysSetting;
-    private CheckBox checkbox1;
-    private CheckBox checkbox2;
-    private CheckBox checkbox3;
-    private TextView sysSetting1;
-    private TextView sysSetting2;
-    private TextView sysSetting3;
 
     private TextView general;
     private TextView logoutText;
@@ -59,6 +53,7 @@ public class Settings extends Activity {
     private TextView deleteNotesText;
     private ImageButton logoutButton;
     private ImageButton clearCacheButton;
+    private TextView cacheText;
     private ImageButton deleteNotesButton;
     private String[] userInformation;
 
@@ -117,20 +112,16 @@ public class Settings extends Activity {
         /*setting text typeface for three setting titles*/
         personInfo = (TextView) findViewById(R.id.personInfo);
         personInfo.setTypeface(kannada);
-        personInfo.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
-
-        sysSetting = (TextView) findViewById(R.id.sysSetting);
-        sysSetting.setTypeface(kannada);
-        sysSetting.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+        personInfo.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
 
         general = (TextView) findViewById(R.id.generalSetting);
         general.setTypeface(kannada);
-        general.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+        general.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
 
         /*Personal Setting*/
         photoText = (TextView) findViewById(R.id.photo_text);
         photoText.setTypeface(sans_serif);
-        photoText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+        photoText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
 
         headshot = (RoundImageView) findViewById(R.id.user_headShot);
         /*setting user's headshot if exists*/
@@ -166,69 +157,45 @@ public class Settings extends Activity {
 
         accountText = (TextView) findViewById(R.id.account_text);
         accountText.setTypeface(sans_serif);
-        accountText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+        accountText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
 
         myaccountfield = (EditText) findViewById(R.id.myAcount);
         myaccountfield.setText(email);
+        myaccountfield.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
         myaccountfield.setFocusable(false);
         myaccountfield.setFocusableInTouchMode(false);
 
         nameText = (TextView) findViewById(R.id.name_text);
         nameText.setTypeface(sans_serif);
-        nameText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+        nameText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
 
         mUsernamefield = (EditText) findViewById(R.id.myusername);
         mUsernamefield.setText(username);
+        mUsernamefield.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
         mUsernamefield.setFocusable(false);
         mUsernamefield.setFocusableInTouchMode(false);
-
-        /*System Setting*/
-        sysSetting1 = (TextView) findViewById(R.id.sysSetting1);
-        sysSetting1.setTypeface(sans_serif);
-        sysSetting1.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-
-        sysSetting2 = (TextView) findViewById(R.id.sysSetting2);
-        sysSetting2.setTypeface(sans_serif);
-        sysSetting2.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-
-        sysSetting3 = (TextView) findViewById(R.id.sysSetting3);
-        sysSetting3.setTypeface(sans_serif);
-        sysSetting3.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-
-        checkbox1 = (CheckBox) findViewById(R.id.checkbox_1);
-        checkbox2 = (CheckBox) findViewById(R.id.checkbox_2);
-        checkbox3 = (CheckBox) findViewById(R.id.checkbox_3);
-        checkbox1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // automatically transform voice to text
-            }
-        });
-        checkbox2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //display location on screen
-            }
-        });
-        checkbox3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // display weather on screen
-            }
-        });
 
         /*GENERAL setting*/
         logoutText = (TextView) findViewById(R.id.log_out_text);
         logoutText.setTypeface(sans_serif);
-        logoutText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+        logoutText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
 
         clearCacheText = (TextView) findViewById(R.id.clear_cache_text);
         clearCacheText.setTypeface(sans_serif);
-        clearCacheText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+        clearCacheText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
+
+        cacheText = (TextView) findViewById(R.id.cacheSize);
+        cacheText.setTypeface(sans_serif);
+        cacheText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+        try {
+            cacheText.setText(CacheDataManager.getTotalCacheSize(this));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
         deleteNotesText = (TextView) findViewById(R.id.delete_notes_text);
         deleteNotesText.setTypeface(sans_serif);
-        deleteNotesText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+        deleteNotesText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
 
         logoutButton = (ImageButton) findViewById(R.id.log_out_button);
         clearCacheButton = (ImageButton) findViewById(R.id.clear_cache_button);
@@ -244,6 +211,7 @@ public class Settings extends Activity {
             @Override
             public void onClick(View view) {
                 // clear cache
+                new Thread(new clearCache()).start();
             }
         });
         deleteNotesButton.setOnClickListener(new View.OnClickListener() {
@@ -413,4 +381,32 @@ public class Settings extends Activity {
         }
         return image;
     }
+
+    class clearCache implements Runnable {
+        @Override
+        public void run() {
+            try {
+                CacheDataManager.clearAllCache(Settings.this);
+                Thread.sleep(3000);
+                if (CacheDataManager.getTotalCacheSize(Settings.this).startsWith("0")) {
+                    handler.sendEmptyMessage(0);
+                }
+            } catch (Exception e) {
+                return;
+            }
+        }
+    }
+    private Handler handler = new Handler() {
+        public void handleMessage(android.os.Message msg) {
+            switch (msg.what) {
+                case 0:
+                    Toast.makeText(Settings.this,"Cleaning Cache Done",Toast.LENGTH_SHORT).show();
+                    try {
+                        cacheText.setText(CacheDataManager.getTotalCacheSize(Settings.this));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+            }
+        }
+    };
 }
