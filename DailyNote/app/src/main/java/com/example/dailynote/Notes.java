@@ -90,7 +90,7 @@ public class Notes extends Activity {
             deleteAll();
         }
         else{
-            if (data == null){
+            if (data == null||data.isEmpty()){
                 deleteAll();
             }
             sortData();
