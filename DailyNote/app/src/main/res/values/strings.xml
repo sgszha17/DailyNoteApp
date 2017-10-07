@@ -20,5 +20,9 @@
     <string name="clear_cache">Clear Cache</string>
     <string name="delete_notes">Delete All Notes</string>
     <string name="done">Done</string>
+    <string name="takePhoto">Take Photo</string>
+    <string name="chooseAlbum">Choose from Album</string>
+    <string name="createNote">Create New Note</string>
+    <string name="inputText">Input your note</string>
 
 </resources>

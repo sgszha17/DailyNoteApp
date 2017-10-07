@@ -24,6 +24,7 @@
             <ImageButton
                 android:layout_width="20sp"
                 android:layout_height="20sp"
+                android:layout_marginLeft="10dp"
                 android:layout_alignParentLeft="true"
                 android:background="@drawable/arrow_left"
                 android:id="@+id/return_button"/>
@@ -38,29 +39,32 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
             android:orientation="horizontal"
             android:layout_marginTop="10dp">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:text="@string/photo"
                 android:id="@+id/photo_text"
                 android:textColor="#ffffff"/>
 
             <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="45sp"
+                android:layout_height="60sp"
                 android:layout_centerVertical="true"
                 android:gravity="center_vertical">
                 <com.example.dailynote.RoundImageView
                     android:id="@+id/user_headShot"
-                    android:layout_width="45sp"
-                    android:layout_height="45sp"
+                    android:layout_width="60sp"
+                    android:layout_height="60sp"
                     android:layout_centerHorizontal="true"
                     android:scaleType="centerCrop"/>
                 <ImageView
-                    android:layout_width="45sp"
-                    android:layout_height="45sp"
+                    android:layout_width="60sp"
+                    android:layout_height="60sp"
+                    android:layout_marginLeft="20dp"
                     android:layout_centerHorizontal="true"
                     android:background="@drawable/usericon_bg_circle"/>
             </RelativeLayout>
@@ -69,6 +73,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
             android:orientation="horizontal">
             <TextView
                 android:layout_width="wrap_content"
@@ -77,8 +83,10 @@
                 android:id="@+id/account_text"
                 android:textColor="#ffffff"/>
             <EditText
+                android:id="@+id/myAcount"
                 android:layout_width="wrap_content"
                 android:layout_height="20sp"
+                android:layout_gravity="bottom"
                 android:background="@drawable/personalinfo_layout"
                 android:textColor="#ffffff"/>
         </LinearLayout>
@@ -86,16 +94,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
             android:layout_marginBottom="10dp">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/name"
+                android:text="Username:"
                 android:id="@+id/name_text"
                 android:textColor="#ffffff"/>
             <EditText
                 android:layout_width="wrap_content"
+                android:id="@+id/myusername"
                 android:layout_height="20sp"
+                android:layout_marginLeft="5dp"
+                android:layout_gravity="bottom"
                 android:background="@drawable/personalinfo_layout"
                 android:textColor="#ffffff"/>
         </LinearLayout>

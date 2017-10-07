@@ -9,27 +9,46 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="180dp"
-        android:id="@+id/personalBackground">
+        android:id="@+id/personalBackground"
+        android:background="@drawable/personal_info_background">
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:orientation="vertical"
+            android:gravity="center"
             android:id="@+id/userInfo">
-            <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:id="@+id/headShot"/>
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="70sp"
+                android:layout_centerVertical="true"
+                android:gravity="center_vertical">
+                <com.example.dailynote.RoundImageView
+                    android:id="@+id/headShot"
+                    android:layout_width="70sp"
+                    android:layout_height="70sp"
+                    android:layout_centerHorizontal="true"
+                    android:scaleType="centerCrop"/>
+                <ImageView
+                    android:layout_width="70sp"
+                    android:layout_height="70sp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/usericon_bg_circle"/>
+            </RelativeLayout>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/userName"/>
         </LinearLayout>
         <ImageButton
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:id="@+id/settings"
             android:background="@drawable/setting"
-            android:layout_alignParentRight="true"/>
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"/>
     </RelativeLayout>
 
     <ListView

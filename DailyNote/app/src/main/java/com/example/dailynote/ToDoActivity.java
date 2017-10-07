@@ -10,25 +10,28 @@ import java.util.concurrent.TimeUnit;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
@@ -41,17 +44,14 @@ import com.microsoft.windowsazure.mobileservices.http.ServiceFilter;
 import com.microsoft.windowsazure.mobileservices.http.ServiceFilterRequest;
 import com.microsoft.windowsazure.mobileservices.http.ServiceFilterResponse;
 import com.microsoft.windowsazure.mobileservices.table.MobileServiceTable;
-import com.microsoft.windowsazure.mobileservices.table.query.Query;
-import com.microsoft.windowsazure.mobileservices.table.query.QueryOperations;
 import com.microsoft.windowsazure.mobileservices.table.sync.MobileServiceSyncContext;
-import com.microsoft.windowsazure.mobileservices.table.sync.MobileServiceSyncTable;
 import com.microsoft.windowsazure.mobileservices.table.sync.localstore.ColumnDataType;
 import com.microsoft.windowsazure.mobileservices.table.sync.localstore.MobileServiceLocalStoreException;
 import com.microsoft.windowsazure.mobileservices.table.sync.localstore.SQLiteLocalStore;
 import com.microsoft.windowsazure.mobileservices.table.sync.synchandler.SimpleSyncHandler;
 import com.squareup.okhttp.OkHttpClient;
 
-import static com.microsoft.windowsazure.mobileservices.table.query.QueryOperations.*;
+import static android.content.ContentValues.TAG;
 
 public class ToDoActivity extends Activity {
     /*Changed by Tong Zou*/
@@ -63,7 +63,24 @@ public class ToDoActivity extends Activity {
     private ImageButton facebook_login;
     private ImageButton google_login;
     private ImageButton wechat_login;
-    private Button testButton;
+
+    private RegisterDialog registerDialog;
+    private String mUsername="";
+    private String mEmail="";
+    private String mPassword="";
+    private Button login;
+    private Button register;
+    private EditText enteredEmail;
+    private EditText enteredPAssword;
+    final private int registerByEmail = 0;
+    final private int registerByFB = 1;
+    final private int registerByGoogle = 2;
+    final private int registerByWechat = 3;
+    private Boolean exist;
+    private ProgressBar progressBar;
+    private  LinearLayout l;
+    private Boolean logOut;
+    private Users currentUser = new Users();
     /**
      * Mobile Service Client reference
      */
@@ -72,28 +89,7 @@ public class ToDoActivity extends Activity {
     /**
      * Mobile Service Table used to access data
      */
-    private MobileServiceTable<ToDoItem> mToDoTable;
-
-    //Offline Sync
-    /**
-     * Mobile Service Table used to access and Sync data
-     */
-    //private MobileServiceSyncTable<ToDoItem> mToDoTable;
-
-    /**
-     * Adapter to sync the items list with the view
-     */
-    private ToDoItemAdapter mAdapter;
-
-    /**
-     * EditText containing the "New To Do" text
-     */
-    private EditText mTextNewToDo;
-
-    /**
-     * Progress spinner to use for table operations
-     */
-    private ProgressBar mProgressBar;
+    private MobileServiceTable<Users> user;
 
     /**
      * Initializes the activity
@@ -102,6 +98,9 @@ public class ToDoActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_to_do);
+        exist = false;
+        Intent intent = getIntent();
+        logOut = intent.getBooleanExtra("logout",false);
 
         mainLayout = (LinearLayout) findViewById(R.id.mainLayout);
         mainLayout.setBackgroundColor(Color.rgb(48, 66,82));
@@ -114,7 +113,8 @@ public class ToDoActivity extends Activity {
         int height = dm.heightPixels;
         int width = dm.widthPixels;
 
-        testButton = (Button) findViewById(R.id.testingButton);
+        enteredEmail = (EditText)findViewById(R.id.enterEmail);
+        enteredPAssword = (EditText)findViewById(R.id.enterPassword);
 
         facebook_login = (ImageButton) findViewById(R.id.facebook);
         facebook_login.setOnClickListener(new View.OnClickListener() {
@@ -138,15 +138,20 @@ public class ToDoActivity extends Activity {
             }
         });
 
-        testButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent();
-                intent.setClass(ToDoActivity.this, Notes.class);
-                startActivity(intent);
-                ToDoActivity.this.finish();
-            }
-        });
+//        testButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent();
+//                intent.setClass(ToDoActivity.this, Notes.class);
+//                startActivity(intent);
+//                ToDoActivity.this.finish();
+//
+//            }
+//        });
+
+        progressBar = (ProgressBar) findViewById(R.id.loadingProgressBar);
+
+
 
         try {
             // Create the Mobile Service Client instance, using the provided
@@ -167,27 +172,101 @@ public class ToDoActivity extends Activity {
                 }
             });
 
-            // Get the Mobile Service Table instance to use
-
-            mToDoTable = mClient.getTable(ToDoItem.class);
-
-            // Offline Sync
-            //mToDoTable = mClient.getSyncTable("ToDoItem", ToDoItem.class);
-
-            //Init local storage
-            initLocalStore().get();
-
-            // Create an adapter to bind the items with the view
-            //mAdapter = new ToDoItemAdapter(this, R.layout.row_list_to_do);
-
-            // Load the items from the Mobile Service
-            refreshItemsFromTable();
-
         } catch (MalformedURLException e) {
-            createAndShowDialog(new Exception("There was an error creating the Mobile Service. Verify the URL"), "Error");
+         //   createAndShowDialog(new Exception("There was an error creating the Mobile Service. Verify the URL"), "Error");
         } catch (Exception e){
-            createAndShowDialog(e, "Error");
+          //  createAndShowDialog(e, "Error");
         }
+
+        //Get the Mobile Service Table instance to use
+        user = mClient.getTable(Users.class);
+        loginAndRegister();
+    }
+
+    public void login(){
+        try {
+            Log.d(TAG, "onClick: something");
+
+            currentUser.setEmail(enteredEmail.getText().toString());
+            currentUser.setPassword(enteredPAssword.getText().toString());
+            Log.d(TAG, "login: email is " +currentUser.getEmail());
+
+            if (!currentUser.getEmail().isEmpty()&& !currentUser.getPassword().isEmpty()) {
+                retrieveUsers();
+            }else {
+                Toast.makeText(ToDoActivity.this,"Please enter email and password.",Toast.LENGTH_SHORT).show();
+            }
+
+        }catch(ExecutionException ee){
+            Log.e(TAG, "onClick: Execution ERROR:",ee );
+        }catch(InterruptedException ie){
+            Log.e(TAG, "onClick: Interryption ERROR:",ie );
+        }
+    }
+
+    public void loginSucceed(){
+        Toast.makeText(ToDoActivity.this,"Login succeed",Toast.LENGTH_SHORT).show();
+        storeUserLoginInformationOnLocal(currentUser);
+        Intent intent = new Intent();
+        intent.setClass(ToDoActivity.this, Notes.class);
+        Log.d(TAG, "loginSucceed: Username is "+mUsername);
+        Log.d(TAG, "loginSucceed: password is "+mPassword);
+        Log.d(TAG, "loginSucceed: email is "+mEmail);
+        String[] userData = {currentUser.getUsername(),currentUser.getPassword(),currentUser.getEmail()};
+        startActivity(intent);
+        ToDoActivity.this.finish();
+    }
+
+    // login and register method
+    public void loginAndRegister(){
+
+        userLoginInformationFromLocal();
+
+        login = (Button) findViewById(R.id.Login);
+        login.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                login();
+            }
+        });
+        register = (Button)findViewById(R.id.Register);
+        register.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                registerDialog = new RegisterDialog(ToDoActivity.this);
+                registerDialog.show();
+                registerDialog.setCancelOnclickListener(new RegisterDialog.onCancelOnclickListener(){
+                    @Override
+                    public void onCancelClick() {
+                        registerDialog.dismiss();
+                    }
+                });
+                registerDialog.setConfirmOnclickListener(new RegisterDialog.onConfirmOnclickListener(){
+                    @Override
+                    public void onConfirmClick() {
+                        mUsername = registerDialog.userName.getText().toString();
+                        mPassword = registerDialog.password.getText().toString();
+                        mEmail = registerDialog.email.getText().toString();
+                        if(mUsername.isEmpty()||mEmail.isEmpty()||mPassword.isEmpty()){
+                            Toast.makeText(ToDoActivity.this,"Please complete all empty input box.",Toast.LENGTH_SHORT).show();
+                        }else{
+                            enteredEmail.setText(mEmail);
+                            enteredPAssword.setText(mPassword);
+                            addItem();
+                            Toast.makeText(ToDoActivity.this,"Succeed",Toast.LENGTH_SHORT).show();
+                            registerDialog.dismiss();
+                            Intent intent = new Intent();
+                            intent.setClass(ToDoActivity.this, Notes.class);
+//                            String[] userData = {mUsername,mPassword,mEmail};
+//                            intent.putExtra("getin",userData);
+                            startActivity(intent);
+                            ToDoActivity.this.finish();
+                        }
+
+                    }
+                });
+            }
+        });
     }
 
     /**
@@ -202,54 +281,15 @@ public class ToDoActivity extends Activity {
     /**
      * Select an option from the menu
      */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.menu_refresh) {
-            refreshItemsFromTable();
-        }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        if (item.getItemId() == R.id.menu_refresh) {
+//            refreshItemsFromTable();
+//        }
+//
+//        return true;
+//    }
 
-        return true;
-    }
-
-    /**
-     * Mark an item as completed
-     *
-     * @param item
-     *            The item to mark
-     */
-    public void checkItem(final ToDoItem item) {
-        if (mClient == null) {
-            return;
-        }
-
-        // Set the item as completed and update it in the table
-        item.setComplete(true);
-
-        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>(){
-            @Override
-            protected Void doInBackground(Void... params) {
-                try {
-
-                    checkItemInTable(item);
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (item.isComplete()) {
-                                mAdapter.remove(item);
-                            }
-                        }
-                    });
-                } catch (final Exception e) {
-                    createAndShowDialogFromTask(e, "Error");
-                }
-
-                return null;
-            }
-        };
-
-        runAsyncTask(task);
-
-    }
 
     /**
      * Mark an item as completed in the Mobile Service Table
@@ -257,42 +297,41 @@ public class ToDoActivity extends Activity {
      * @param item
      *            The item to mark
      */
-    public void checkItemInTable(ToDoItem item) throws ExecutionException, InterruptedException {
-        mToDoTable.update(item).get();
+    public void checkItemInTable(Users item) throws ExecutionException, InterruptedException {
+        user.update(item).get();
     }
 
     /**
      * Add a new item
      *
-     * @param view
+     *
      *            The view that originated the call
      */
-    public void addItem(View view) {
+    public void addItem() {
         if (mClient == null) {
             return;
         }
 
         // Create a new item
-        final ToDoItem item = new ToDoItem();
+        final Users item = new Users();
 
-        item.setText(mTextNewToDo.getText().toString());
-        item.setComplete(false);
+        item.setUsername(mUsername);
+        item.setEmail(mEmail);
+        item.setPassword(mPassword);
+        item.setRegisterType(registerByEmail);
+        item.setUseFB(false);
+        item.setUseWechat(false);
+        item.setUseGoogle(false);
+        item.setAdditionalData("");
 
         // Insert the new item
         AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>(){
             @Override
             protected Void doInBackground(Void... params) {
                 try {
-                    final ToDoItem entity = addItemInTable(item);
+                    final Users entity = addItemInTable(item);
+                    storeUserLoginInformationOnLocal(entity);
 
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if(!entity.isComplete()){
-                                mAdapter.add(entity);
-                            }
-                        }
-                    });
                 } catch (final Exception e) {
                     createAndShowDialogFromTask(e, "Error");
                 }
@@ -302,8 +341,8 @@ public class ToDoActivity extends Activity {
 
         runAsyncTask(task);
 
-        mTextNewToDo.setText("");
     }
+
 
     /**
      * Add an item to the Mobile Service Table
@@ -311,70 +350,71 @@ public class ToDoActivity extends Activity {
      * @param item
      *            The item to Add
      */
-    public ToDoItem addItemInTable(ToDoItem item) throws ExecutionException, InterruptedException {
-        ToDoItem entity = mToDoTable.insert(item).get();
+    public Users addItemInTable(Users item) throws ExecutionException, InterruptedException {
+        Log.d(TAG, "addItemInTable: Debug");
+       Users entity = user.insert(item).get();
+
         return entity;
     }
-
     /**
-     * Refresh the list with the items in the Table
+     * Retrieve items to the Mobile Service Table
+     *
+     *
      */
-    private void refreshItemsFromTable() {
 
-        // Get the items that weren't marked as completed and add them in the
-        // adapter
+    private Boolean retrieveUsers() throws ExecutionException, InterruptedException {
 
         AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>(){
             @Override
             protected Void doInBackground(Void... params) {
 
                 try {
-                    final List<ToDoItem> results = refreshItemsFromMobileServiceTable();
+                    List<Users> temp = user.where().field("email").eq(currentUser.getEmail()).and().field("password").eq(currentUser.getPassword()).execute().get();
+                    Log.d(TAG, "doInBackground: the size is "+temp.size());
+                    if (!temp.isEmpty()){
+                        exist = true;
+                        currentUser.setUsername(temp.get(0).getUsername());
+                        Log.d(TAG, "doInBackground: exist is "+exist);
+                        Log.d(TAG, "doInBackground: email is "+temp.get(0).getEmail());
+                        Log.d(TAG, "doInBackground: password is "+temp.get(0).getPassword());
+                    }
 
-                    //Offline Sync
-                    //final List<ToDoItem> results = refreshItemsFromMobileServiceTableSyncTable();
-
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            mAdapter.clear();
-
-                            for (ToDoItem item : results) {
-                                mAdapter.add(item);
-                            }
-                        }
-                    });
                 } catch (final Exception e){
                     createAndShowDialogFromTask(e, "Error");
                 }
 
                 return null;
             }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+                Log.d(TAG, "onPostExecute: running, and exist is "+exist);
+                if(exist){
+                    if (progressBar != null) {
+                        progressBar.setVisibility(ProgressBar.GONE);
+                        l.setVisibility(l.VISIBLE);
+                    }
+                    loginSucceed();
+                }else{
+                    Toast.makeText(ToDoActivity.this,"Email or password wrong",Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                if (progressBar != null) {
+                    progressBar.setVisibility(ProgressBar.VISIBLE);
+                    l = (LinearLayout)findViewById(R.id.refisterAndLoginBotton);
+                    l.setVisibility(l.GONE);
+                }
+            }
         };
-
         runAsyncTask(task);
+
+        return exist;
     }
-
-    /**
-     * Refresh the list with the items in the Mobile Service Table
-     */
-
-    private List<ToDoItem> refreshItemsFromMobileServiceTable() throws ExecutionException, InterruptedException {
-        return mToDoTable.where().field("complete").
-                eq(val(false)).execute().get();
-    }
-
-    //Offline Sync
-    /**
-     * Refresh the list with the items in the Mobile Service Sync Table
-     */
-    /*private List<ToDoItem> refreshItemsFromMobileServiceTableSyncTable() throws ExecutionException, InterruptedException {
-        //sync the data
-        sync().get();
-        Query query = QueryOperations.field("complete").
-                eq(val(false));
-        return mToDoTable.read(query).get();
-    }*/
 
     /**
      * Initialize local storage
@@ -398,11 +438,11 @@ public class ToDoActivity extends Activity {
                     SQLiteLocalStore localStore = new SQLiteLocalStore(mClient.getContext(), "OfflineStore", null, 1);
 
                     Map<String, ColumnDataType> tableDefinition = new HashMap<String, ColumnDataType>();
-                    tableDefinition.put("id", ColumnDataType.String);
-                    tableDefinition.put("text", ColumnDataType.String);
-                    tableDefinition.put("complete", ColumnDataType.Boolean);
+                    tableDefinition.put("username", ColumnDataType.String);
+                    tableDefinition.put("email", ColumnDataType.String);
+                    tableDefinition.put("password", ColumnDataType.String);
 
-                    localStore.defineTable("ToDoItem", tableDefinition);
+                    localStore.defineTable("Users", tableDefinition);
 
                     SimpleSyncHandler handler = new SimpleSyncHandler();
 
@@ -506,6 +546,33 @@ public class ToDoActivity extends Activity {
         }
     }
 
+    public void storeUserLoginInformationOnLocal(Users entity){
+        SharedPreferences preferences = getSharedPreferences("myPref", MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+
+        editor.putString("username",entity.getUsername());
+        editor.putString("password",entity.getPassword());
+        editor.putString("email",entity.getEmail());
+
+        editor.commit();
+        Log.d(TAG, "storeUserLoginInformationOnLocal: Done");
+
+    }
+
+    public void userLoginInformationFromLocal(){
+        Log.d(TAG, "userLoginInformationFromLocal: Here");
+        SharedPreferences preferences = getSharedPreferences("myPref", MODE_PRIVATE);
+        mUsername = preferences.getString("username","");
+        mPassword = preferences.getString("password","");
+        mEmail = preferences.getString("email","");
+        enteredEmail.setText(mEmail);
+        enteredPAssword.setText(mPassword);
+        Log.d(TAG, "userLoginInformationFromLocal: The email is " +mEmail +" Password is " +mPassword);
+        if(!logOut){
+            login();
+        }
+
+    }
     private class ProgressFilter implements ServiceFilter {
 
         @Override
@@ -518,7 +585,12 @@ public class ToDoActivity extends Activity {
 
                 @Override
                 public void run() {
-                    if (mProgressBar != null) mProgressBar.setVisibility(ProgressBar.VISIBLE);
+
+                    if (progressBar != null) {
+                        progressBar.setVisibility(ProgressBar.VISIBLE);
+                        l = (LinearLayout)findViewById(R.id.refisterAndLoginBotton);
+                        l.setVisibility(l.GONE);
+                    }
                 }
             });
 
@@ -536,7 +608,10 @@ public class ToDoActivity extends Activity {
 
                         @Override
                         public void run() {
-                            if (mProgressBar != null) mProgressBar.setVisibility(ProgressBar.GONE);
+                            if (progressBar != null) {
+                                progressBar.setVisibility(ProgressBar.GONE);
+                                l.setVisibility(l.VISIBLE);
+                            }
                         }
                     });
 
@@ -547,4 +622,5 @@ public class ToDoActivity extends Activity {
             return resultFuture;
         }
     }
+
 }
