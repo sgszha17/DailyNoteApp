@@ -1,3 +1,18 @@
+/**
+ * @(CacheDataManager).java     1.61 08/10/2017
+ *
+ * Copyright 2017 University of Melbourne. All rights reserved.
+ *
+ * @author Dawei Wang
+ * @email daweiw@student.unimelb.edu.au
+ *
+ * @author Siyu Zhang
+ * @email siyuz6@student.unimelb.edu.au
+ *
+ * @author Tong Zou
+ * @email tzou2@student.unimelb.edu.au
+ *
+ **/
 package com.example.dailynote;
 
 import android.content.Context;
@@ -15,6 +30,10 @@ public class CacheDataManager {
         return getFormatSize(cacheSize);
     }
 
+    /**
+     * Clear All cache
+     * @param context
+     * */
     public static void clearAllCache(Context context) {
         deleteDir(context.getCacheDir());
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
@@ -22,6 +41,10 @@ public class CacheDataManager {
         }
     }
 
+    /**
+     * Check whether the clear cache successful
+     * @param dir
+     * */
     private static boolean deleteDir(File dir) {
         if (dir != null && dir.isDirectory()) {
             String[] children = dir.list();
@@ -35,17 +58,17 @@ public class CacheDataManager {
         return dir.delete();
     }
 
-    // 获取文件
-    // Context.getExternalFilesDir() --> SDCard/Android/data/你的应用的包名/files/
-    // 目录，一般放一些长时间保存的数据
-    // Context.getExternalCacheDir() -->
-    // SDCard/Android/data/你的应用包名/cache/目录，一般存放临时缓存数据
+
+    /**
+     * Fetch the file
+     * @param file
+     * */
     public static long getFolderSize(File file) throws Exception {
         long size = 0;
         try {
             File[] fileList = file.listFiles();
             for (int i = 0; i < fileList.length; i++) {
-                // 如果下面还有文件
+                //if there still are several files
                 if (fileList[i].isDirectory()) {
                     size = size + getFolderSize(fileList[i]);
                 } else {
@@ -60,7 +83,7 @@ public class CacheDataManager {
     }
 
     /**
-     * 格式化单位
+     * Formatting the size
      *
      * @param size
      */

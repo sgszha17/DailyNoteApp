@@ -1,3 +1,18 @@
+/**
+ * @(Setting).java     1.61 08/10/2017
+ *
+ * Copyright 2017 University of Melbourne. All rights reserved.
+ *
+ * @author Dawei Wang
+ * @email daweiw@student.unimelb.edu.au
+ *
+ * @author Siyu Zhang
+ * @email siyuz6@student.unimelb.edu.au
+ *
+ * @author Tong Zou
+ * @email tzou2@student.unimelb.edu.au
+ *
+ **/
 package com.example.dailynote;
 
 import android.app.Activity;
@@ -20,7 +35,6 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -39,26 +53,22 @@ public class Settings extends Activity {
     private Typeface kannada;
     private Typeface sans_serif;
 
-    private ImageButton returnButton;
     private TextView personInfo;
     private TextView photoText;
-    private RoundImageView headshot;
     private TextView accountText;
     private TextView nameText;
-
-
     private TextView general;
+    private TextView cacheText;
     private TextView logoutText;
     private TextView clearCacheText;
     private TextView deleteNotesText;
-    private ImageButton logoutButton;
-    private ImageButton clearCacheButton;
-    private TextView cacheText;
-    private ImageButton deleteNotesButton;
-    private String[] userInformation;
-
     private EditText myaccountfield;
     private EditText mUsernamefield;
+    private RoundImageView headshot;
+    private ImageButton logoutButton;
+    private ImageButton clearCacheButton;
+    private ImageButton deleteNotesButton;
+    private ImageButton returnButton;
 
     private boolean isDeletedAll;
 
@@ -86,9 +96,6 @@ public class Settings extends Activity {
         builder.detectFileUriExposure();
         isDeletedAll = false;
 
-//        Intent intent = getIntent();
-//        userInformation = intent.getStringArrayExtra("goToSetting");
-
         userLoginInformationFromLocal();
         SharedPreferences preferences = getSharedPreferences("myPref", MODE_PRIVATE);
         String username = preferences.getString("username","");
@@ -106,7 +113,6 @@ public class Settings extends Activity {
                 Intent intent = new Intent();
                 intent.setClass(Settings.this, Notes.class);
                 intent.putExtra("delete_all", isDeletedAll);
-//                intent.putExtra("getin",userInformation);
                 startActivity(intent);
                 Settings.this.finish();
             }

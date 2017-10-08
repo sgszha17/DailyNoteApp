@@ -1,16 +1,30 @@
-package com.example.dailynote;
-
 /**
- * Created by David on 2017/10/5.
- */
+ * @(EditNote).java     1.61 08/10/2017
+ *
+ * Copyright 2017 University of Melbourne. All rights reserved.
+ *
+ * @author Dawei Wang
+ * @email daweiw@student.unimelb.edu.au
+ *
+ * @author Siyu Zhang
+ * @email siyuz6@student.unimelb.edu.au
+ *
+ * @author Tong Zou
+ * @email tzou2@student.unimelb.edu.au
+ *
+ **/
+package com.example.dailynote;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.AssetManager;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -22,13 +36,19 @@ import java.util.Locale;
 
 
 public class EditNote extends Activity {
+    private AssetManager assetManager;
+    private Typeface sans_serif;
+
+    private TextView title_prompt;
     private ImageButton backButton;
     private ImageButton recordButton;
     private TextView saveButton;
     private EditText noteTitle;
     private TextView dateCreated;
     private EditText noteContent;
+
     private Note noteEdit;
+
     private int id;
     private final int REQ_CODE_SPEECH_INPUT = 100;
 
@@ -36,12 +56,22 @@ public class EditNote extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_note);
+
+        assetManager = getAssets();
+        sans_serif = Typeface.createFromAsset(assetManager, "Times_Sans_Serif.ttf");
+        title_prompt = (TextView)findViewById(R.id.title_prompt);
+        title_prompt.setTypeface(sans_serif);
+        title_prompt.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+
+
+
         backButton = (ImageButton) findViewById(R.id.edit_note_back);
         saveButton = (TextView) findViewById(R.id.save);
         recordButton = (ImageButton) findViewById(R.id.edit_note_record);
         noteTitle = (EditText) findViewById(R.id.edit_note_title);
         dateCreated = (TextView) findViewById(R.id.edit_note_date);
         noteContent = (EditText) findViewById(R.id.multilineText);
+
 
         Intent i = getIntent();
         id = i.getIntExtra("id", -1);
@@ -50,6 +80,9 @@ public class EditNote extends Activity {
         noteTitle.setText(noteEdit.title);
         dateCreated.setText("Date Created: " + noteEdit.date);
         noteContent.setText(noteEdit.content);
+
+        dateCreated.setTypeface(sans_serif);
+        dateCreated.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override

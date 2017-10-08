@@ -1,26 +1,30 @@
+/**
+ * @(LaunchActivity).java     1.61 08/10/2017
+ *
+ * Copyright 2017 University of Melbourne. All rights reserved.
+ *
+ * @author Dawei Wang
+ * @email daweiw@student.unimelb.edu.au
+ *
+ * @author Siyu Zhang
+ * @email siyuz6@student.unimelb.edu.au
+ *
+ * @author Tong Zou
+ * @email tzou2@student.unimelb.edu.au
+ *
+ **/
+
 package com.example.dailynote;
 
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.net.MalformedURLException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Fragment;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
@@ -29,7 +33,6 @@ import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.Preference;
 import android.support.v4.app.FragmentActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -50,8 +53,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.OptionalPendingResult;
-import com.google.android.gms.common.api.ResultCallback;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -63,50 +64,42 @@ import com.microsoft.windowsazure.mobileservices.http.ServiceFilter;
 import com.microsoft.windowsazure.mobileservices.http.ServiceFilterRequest;
 import com.microsoft.windowsazure.mobileservices.http.ServiceFilterResponse;
 import com.microsoft.windowsazure.mobileservices.table.MobileServiceTable;
-import com.microsoft.windowsazure.mobileservices.table.sync.MobileServiceSyncContext;
-import com.microsoft.windowsazure.mobileservices.table.sync.localstore.ColumnDataType;
-import com.microsoft.windowsazure.mobileservices.table.sync.localstore.MobileServiceLocalStoreException;
-import com.microsoft.windowsazure.mobileservices.table.sync.localstore.SQLiteLocalStore;
-import com.microsoft.windowsazure.mobileservices.table.sync.synchandler.SimpleSyncHandler;
 import com.squareup.okhttp.OkHttpClient;
 
 import static android.content.ContentValues.TAG;
 
-public class ToDoActivity extends FragmentActivity implements
-        GoogleApiClient.OnConnectionFailedListener,
-        View.OnClickListener{
+public class ToDoActivity extends FragmentActivity
+        implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener{
+
     private static final int RC_SIGN_IN = 9001;
-    private ProgressDialog mProgressDialog;
-    private LinearLayout mainLayout;
-    private TextView appName;
-    private AssetManager assetManager;
-    private Typeface typeface;
-    DisplayMetrics dm = new DisplayMetrics();
-    private ImageButton facebook_login;
-    private ImageButton google_login;
-    private ImageButton wechat_login;
-
-    private List<Note> data;
-
-    private GoogleApiClient mGoogleApiClient;
-
-    private RegisterDialog registerDialog;
-    private String mUsername="";
-    private String mEmail="";
-    private String mPassword="";
-    private Button login;
-    private Button register;
-    private EditText enteredEmail;
-    private EditText enteredPAssword;
     final private int registerByEmail = 0;
     final private int registerByFB = 1;
     final private int registerByGoogle = 2;
     final private int registerByWechat = 3;
     private Boolean exist;
-    private ProgressBar progressBar;
-    private  LinearLayout l;
     private Boolean logOut;
+
+    private ProgressDialog mProgressDialog;
+    private RegisterDialog registerDialog;
+    private LinearLayout mainLayout;
+    private TextView appName;
+    private AssetManager assetManager;
+    private Typeface typeface;
+
+    private List<Note> data;
+    private  LinearLayout l;
     private Users currentUser = new Users();
+    protected DisplayMetrics dm = new DisplayMetrics();
+    private GoogleApiClient mGoogleApiClient;
+
+    private ImageButton google_login;
+    private Button login;
+    private Button register;
+    private EditText enteredEmail;
+    private EditText enteredPAssword;
+    private ProgressBar progressBar;
+
+
     /**
      * Mobile Service Client reference
      */
@@ -142,13 +135,7 @@ public class ToDoActivity extends FragmentActivity implements
         enteredEmail = (EditText)findViewById(R.id.enterEmail);
         enteredPAssword = (EditText)findViewById(R.id.enterPassword);
 
-        facebook_login = (ImageButton) findViewById(R.id.facebook);
-        facebook_login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
 
-            }
-        });
 
 
         /* google play initialize*/
@@ -174,13 +161,13 @@ public class ToDoActivity extends FragmentActivity implements
 
 
 
-        wechat_login = (ImageButton) findViewById(R.id.wechat);
-        wechat_login.setOnClickListener(this);
-
         progressBar = (ProgressBar) findViewById(R.id.loadingProgressBar);
 
 
 
+        /**
+         * Initial Back end connection
+         */
         try {
             // Create the Mobile Service Client instance, using the provided
             // Mobile Service URL and key
@@ -200,9 +187,9 @@ public class ToDoActivity extends FragmentActivity implements
             });
 
         } catch (MalformedURLException e) {
-         //   createAndShowDialog(new Exception("There was an error creating the Mobile Service. Verify the URL"), "Error");
+            //   createAndShowDialog(new Exception("There was an error creating the Mobile Service. Verify the URL"), "Error");
         } catch (Exception e){
-          //  createAndShowDialog(e, "Error");
+            //  createAndShowDialog(e, "Error");
         }
 
         //Get the Mobile Service Table instance to use
@@ -214,31 +201,31 @@ public class ToDoActivity extends FragmentActivity implements
     //silent google sign in commented for siyu
 
     /**
-    @Override
-    public void onStart() {
-        super.onStart();
+     @Override
+     public void onStart() {
+     super.onStart();
 
-        OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
-        if (opr.isDone()) {
-            // If the user's cached credentials are valid, the OptionalPendingResult will be "done"
-            // and the GoogleSignInResult will be available instantly.
-            Log.d(TAG, "Got cached sign-in");
-            GoogleSignInResult result = opr.get();
-            handleSignInResult(result);
-        } else {
-            // If the user has not previously signed in on this device or the sign-in has expired,
-            // this asynchronous branch will attempt to sign in the user silently.  Cross-device
-            // single sign-on will occur in this branch.
-            showProgressDialog();
-            opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
-                @Override
-                public void onResult(GoogleSignInResult googleSignInResult) {
-                    hideProgressDialog();
-                    handleSignInResult(googleSignInResult);
-                }
-            });
-        }
-    }*/
+     OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
+     if (opr.isDone()) {
+     // If the user's cached credentials are valid, the OptionalPendingResult will be "done"
+     // and the GoogleSignInResult will be available instantly.
+     Log.d(TAG, "Got cached sign-in");
+     GoogleSignInResult result = opr.get();
+     handleSignInResult(result);
+     } else {
+     // If the user has not previously signed in on this device or the sign-in has expired,
+     // this asynchronous branch will attempt to sign in the user silently.  Cross-device
+     // single sign-on will occur in this branch.
+     showProgressDialog();
+     opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
+     @Override
+     public void onResult(GoogleSignInResult googleSignInResult) {
+     hideProgressDialog();
+     handleSignInResult(googleSignInResult);
+     }
+     });
+     }
+     }*/
 
 
     @Override
@@ -326,7 +313,9 @@ public class ToDoActivity extends FragmentActivity implements
     //****Google sign in End****
 
 
-
+    /**
+     * Initial login and check the enter item
+     * */
     public void login(){
         try {
             Log.d(TAG, "onClick: something");
@@ -348,21 +337,23 @@ public class ToDoActivity extends FragmentActivity implements
         }
     }
 
+    /**
+     * Finish login process and jump to next activity.
+     * */
+
     public void loginSucceed(){
         Toast.makeText(ToDoActivity.this,"Login succeed",Toast.LENGTH_SHORT).show();
         storeUserLoginInformationOnLocal(currentUser);
         Intent intent = new Intent();
         intent.putExtra("data", (Serializable) data);
         intent.setClass(ToDoActivity.this, Notes.class);
-        Log.d(TAG, "loginSucceed: Username is "+mUsername);
-        Log.d(TAG, "loginSucceed: password is "+mPassword);
-        Log.d(TAG, "loginSucceed: email is "+mEmail);
-        String[] userData = {currentUser.getUsername(),currentUser.getPassword(),currentUser.getEmail()};
         startActivity(intent);
         ToDoActivity.this.finish();
     }
 
-    // login and register method
+    /**
+     * login and register event listener
+     * */
     public void loginAndRegister(){
 
         userLoginInformationFromLocal();
@@ -389,21 +380,19 @@ public class ToDoActivity extends FragmentActivity implements
                 registerDialog.setConfirmOnclickListener(new RegisterDialog.onConfirmOnclickListener(){
                     @Override
                     public void onConfirmClick() {
-                        mUsername = registerDialog.userName.getText().toString();
-                        mPassword = registerDialog.password.getText().toString();
-                        mEmail = registerDialog.email.getText().toString();
-                        if(mUsername.isEmpty()||mEmail.isEmpty()||mPassword.isEmpty()){
+                        currentUser.setUsername(registerDialog.userName.getText().toString());
+                        currentUser.setPassword(registerDialog.password.getText().toString());
+                        currentUser.setEmail(registerDialog.email.getText().toString());
+                        if(currentUser.getUsername().isEmpty()||currentUser.getEmail().isEmpty()||currentUser.getPassword().isEmpty()){
                             Toast.makeText(ToDoActivity.this,"Please complete all empty input box.",Toast.LENGTH_SHORT).show();
                         }else{
-                            enteredEmail.setText(mEmail);
-                            enteredPAssword.setText(mPassword);
+                            enteredEmail.setText(currentUser.getEmail());
+                            enteredPAssword.setText(currentUser.getPassword());
                             addItem();
                             Toast.makeText(ToDoActivity.this,"Succeed",Toast.LENGTH_SHORT).show();
                             registerDialog.dismiss();
                             Intent intent = new Intent();
                             intent.setClass(ToDoActivity.this, Notes.class);
-//                            String[] userData = {mUsername,mPassword,mEmail};
-//                            intent.putExtra("getin",userData);
                             startActivity(intent);
                             ToDoActivity.this.finish();
                         }
@@ -424,33 +413,10 @@ public class ToDoActivity extends FragmentActivity implements
     }
 
     /**
-     * Select an option from the menu
-     */
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        if (item.getItemId() == R.id.menu_refresh) {
-//            refreshItemsFromTable();
-//        }
-//
-//        return true;
-//    }
-
-
-    /**
-     * Mark an item as completed in the Mobile Service Table
-     *
-     * @param item
-     *            The item to mark
-     */
-    public void checkItemInTable(Users item) throws ExecutionException, InterruptedException {
-        user.update(item).get();
-    }
-
-    /**
      * Add a new item
      *
      *
-     *            The view that originated the call
+     * The view that originated the call
      */
     public void addItem() {
         if (mClient == null) {
@@ -460,14 +426,14 @@ public class ToDoActivity extends FragmentActivity implements
         // Create a new item
         final Users item = new Users();
 
-        item.setUsername(mUsername);
-        item.setEmail(mEmail);
-        item.setPassword(mPassword);
-        item.setRegisterType(registerByEmail);
-        item.setUseFB(false);
-        item.setUseWechat(false);
-        item.setUseGoogle(false);
-        item.setAdditionalData("");
+        item.setUsername(currentUser.getUsername());
+        item.setEmail(currentUser.getEmail());
+        item.setPassword(currentUser.getPassword());
+        item.setRegisterType(currentUser.getRegisterType());
+        item.setUseFB(currentUser.isUseFB());
+        item.setUseWechat(currentUser.isUseWechat());
+        item.setUseGoogle(currentUser.isUseGoogle());
+        item.setAdditionalData(currentUser.getAdditionalData());
 
         // Insert the new item
         AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>(){
@@ -497,14 +463,13 @@ public class ToDoActivity extends FragmentActivity implements
      */
     public Users addItemInTable(Users item) throws ExecutionException, InterruptedException {
         Log.d(TAG, "addItemInTable: Debug");
-       Users entity = user.insert(item).get();
+        Users entity = user.insert(item).get();
 
         return entity;
     }
+
     /**
      * Retrieve items to the Mobile Service Table
-     *
-     *
      */
 
     private Boolean retrieveUsers() throws ExecutionException, InterruptedException {
@@ -560,73 +525,6 @@ public class ToDoActivity extends FragmentActivity implements
 
         return exist;
     }
-
-    /**
-     * Initialize local storage
-     * @return
-     * @throws MobileServiceLocalStoreException
-     * @throws ExecutionException
-     * @throws InterruptedException
-     */
-    private AsyncTask<Void, Void, Void> initLocalStore() throws MobileServiceLocalStoreException, ExecutionException, InterruptedException {
-
-        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... params) {
-                try {
-
-                    MobileServiceSyncContext syncContext = mClient.getSyncContext();
-
-                    if (syncContext.isInitialized())
-                        return null;
-
-                    SQLiteLocalStore localStore = new SQLiteLocalStore(mClient.getContext(), "OfflineStore", null, 1);
-
-                    Map<String, ColumnDataType> tableDefinition = new HashMap<String, ColumnDataType>();
-                    tableDefinition.put("username", ColumnDataType.String);
-                    tableDefinition.put("email", ColumnDataType.String);
-                    tableDefinition.put("password", ColumnDataType.String);
-
-                    localStore.defineTable("Users", tableDefinition);
-
-                    SimpleSyncHandler handler = new SimpleSyncHandler();
-
-                    syncContext.initialize(localStore, handler).get();
-
-                } catch (final Exception e) {
-                    createAndShowDialogFromTask(e, "Error");
-                }
-
-                return null;
-            }
-        };
-
-        return runAsyncTask(task);
-    }
-
-    //Offline Sync
-    /**
-     * Sync the current context and the Mobile Service Sync Table
-     * @return
-     */
-    /*
-    private AsyncTask<Void, Void, Void> sync() {
-        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>(){
-            @Override
-            protected Void doInBackground(Void... params) {
-                try {
-                    MobileServiceSyncContext syncContext = mClient.getSyncContext();
-                    syncContext.push().get();
-                    mToDoTable.pull(null).get();
-                } catch (final Exception e) {
-                    createAndShowDialogFromTask(e, "Error");
-                }
-                return null;
-            }
-        };
-        return runAsyncTask(task);
-    }
-    */
 
     /**
      * Creates a dialog and shows it
@@ -691,6 +589,11 @@ public class ToDoActivity extends FragmentActivity implements
         }
     }
 
+    /**
+     * Write user information which has been stored on the phone
+     * @param entity
+     *             The instance of Users which contain user information needing to store.
+     */
     public void storeUserLoginInformationOnLocal(Users entity){
         SharedPreferences preferences = getSharedPreferences("myPref", MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
@@ -704,20 +607,27 @@ public class ToDoActivity extends FragmentActivity implements
 
     }
 
+    /**
+     * Read user information which has been stored on the phone
+     */
     public void userLoginInformationFromLocal(){
         Log.d(TAG, "userLoginInformationFromLocal: Here");
         SharedPreferences preferences = getSharedPreferences("myPref", MODE_PRIVATE);
-        mUsername = preferences.getString("username","");
-        mPassword = preferences.getString("password","");
-        mEmail = preferences.getString("email","");
-        enteredEmail.setText(mEmail);
-        enteredPAssword.setText(mPassword);
-        Log.d(TAG, "userLoginInformationFromLocal: The email is " +mEmail +" Password is " +mPassword);
+        currentUser.setUsername( preferences.getString("username",""));
+        currentUser.setPassword(preferences.getString("password",""));
+        currentUser.setEmail(preferences.getString("email",""));
+        enteredEmail.setText(currentUser.getEmail());
+        enteredPAssword.setText(currentUser.getPassword());
+
         if(!logOut){
             login();
         }
 
     }
+
+    /**
+     * Process handler operated with database retrieve thread.
+     */
     private class ProgressFilter implements ServiceFilter {
 
         @Override
