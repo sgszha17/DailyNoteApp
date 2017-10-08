@@ -2,6 +2,11 @@
 using System.Web.Http.Tracing;
 using Microsoft.Azure.Mobile.Server;
 using Microsoft.Azure.Mobile.Server.Config;
+using System.Net.Http;
+using System.Web;
+using System;
+using System.IO;
+using System.Text;
 
 namespace DailyNoteService.Controllers
 {
@@ -10,6 +15,7 @@ namespace DailyNoteService.Controllers
     [MobileAppController]
     public class ValuesController : ApiController
     {
+
         // GET api/values
         public string Get()
         {
@@ -17,16 +23,20 @@ namespace DailyNoteService.Controllers
             ITraceWriter traceWriter = this.Configuration.Services.GetTraceWriter();
 
             string host = settings.HostName ?? "localhost";
-            string greeting = "Hello from " + host;
-            
+
+            string greeting = "Hello from "+ host;
             traceWriter.Info(greeting);
+            
             return greeting;
         }
+
 
         // POST api/values
         public string Post()
         {
             return "Hello World!";
         }
+
+       
     }
 }

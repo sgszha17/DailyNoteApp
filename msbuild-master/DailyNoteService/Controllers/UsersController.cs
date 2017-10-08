@@ -36,14 +36,14 @@ namespace DailyNoteService.Controllers
             return UpdateAsync(id, patch);
         }
 
-        // POST tables/TodoItem
+        // POST tables
         public async Task<IHttpActionResult> PostUsers(Users item)
         {
             Users current = await InsertAsync(item);
             return CreatedAtRoute("Tables", new { id = current.Id }, current);
         }
 
-        // DELETE tables/TodoItem/48D68C86-6EA6-4C25-AA33-223FC9A27959
+        // DELETE tables
         public Task DeleteUsers(string id)
         {
             return DeleteAsync(id);

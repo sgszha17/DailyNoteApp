@@ -23,6 +23,7 @@ namespace DailyNoteService
 
             new MobileAppConfiguration()
                 .UseDefaultConfiguration()
+                .MapApiControllers()
                 .ApplyTo(config);
 
             // Use Entity Framework Code First to create database tables based on your DbContext
@@ -53,17 +54,6 @@ namespace DailyNoteService
     {
         protected override void Seed(DailyNoteContext context)
         {
-          //  List<Users> todoItems = new List<Users>
-            //{
-              //  new Users { Id = Guid.NewGuid().ToString(), Text = "First item", Complete = false },
-               // new Users { Id = Guid.NewGuid().ToString(), Text = "Second item", Complete = false },
-            //};
-
-          //  foreach (Users user in users)
-           // {
-            //    context.Set<Users>().Add(todoItem);
-           // }
-
             base.Seed(context);
         }
     }
