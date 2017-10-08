@@ -19,11 +19,14 @@
         android:layout_marginLeft="10dp">
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="30sp"
-            android:orientation = "horizontal">
+            android:layout_height="50sp"
+            android:orientation = "horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp">
             <ImageButton
-                android:layout_width="20sp"
-                android:layout_height="20sp"
+                android:layout_width="40sp"
+                android:layout_height="50sp"
+                android:layout_marginLeft="10dp"
                 android:layout_alignParentLeft="true"
                 android:background="@drawable/arrow_left"
                 android:id="@+id/return_button"/>
@@ -38,29 +41,32 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
             android:orientation="horizontal"
             android:layout_marginTop="10dp">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:text="@string/photo"
                 android:id="@+id/photo_text"
                 android:textColor="#ffffff"/>
 
             <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="45sp"
+                android:layout_height="80sp"
                 android:layout_centerVertical="true"
                 android:gravity="center_vertical">
                 <com.example.dailynote.RoundImageView
                     android:id="@+id/user_headShot"
-                    android:layout_width="45sp"
-                    android:layout_height="45sp"
+                    android:layout_width="80sp"
+                    android:layout_height="80sp"
                     android:layout_centerHorizontal="true"
                     android:scaleType="centerCrop"/>
                 <ImageView
-                    android:layout_width="45sp"
-                    android:layout_height="45sp"
+                    android:layout_width="80sp"
+                    android:layout_height="80sp"
+                    android:layout_marginLeft="20dp"
                     android:layout_centerHorizontal="true"
                     android:background="@drawable/usericon_bg_circle"/>
             </RelativeLayout>
@@ -68,7 +74,10 @@
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50sp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
             <TextView
                 android:layout_width="wrap_content"
@@ -77,106 +86,50 @@
                 android:id="@+id/account_text"
                 android:textColor="#ffffff"/>
             <EditText
+                android:id="@+id/myAcount"
                 android:layout_width="wrap_content"
-                android:layout_height="20sp"
+                android:layout_height="30sp"
+                android:layout_marginLeft="5dp"
+                android:layout_gravity="center_vertical"
                 android:background="@drawable/personalinfo_layout"
                 android:textColor="#ffffff"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50sp"
             android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
             android:layout_marginBottom="10dp">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/name"
+                android:text="Username:"
                 android:id="@+id/name_text"
                 android:textColor="#ffffff"/>
             <EditText
                 android:layout_width="wrap_content"
-                android:layout_height="20sp"
+                android:id="@+id/myusername"
+                android:layout_height="30sp"
+                android:layout_marginLeft="5dp"
+                android:layout_gravity="center_vertical"
                 android:background="@drawable/personalinfo_layout"
                 android:textColor="#ffffff"/>
         </LinearLayout>
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:id="@+id/systemSetting"
-        android:background="@drawable/layer_list"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp">
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/sysSetting"
-                android:text="@string/SysSetting"
-                android:textColor="#ffffff"
-                android:layout_alignParentRight="true"/>
-        </RelativeLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="10dp">
-            <CheckBox
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/checkbox_1"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/SysSetting1"
-                android:id="@+id/sysSetting1"
-                android:textColor="#ffffff"/>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <CheckBox
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/checkbox_2"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/SysSetting2"
-                android:id="@+id/sysSetting2"
-                android:textColor="#ffffff"/>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp">
-            <CheckBox
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/checkbox_3"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/SysSetting3"
-                android:id="@+id/sysSetting3"
-                android:textColor="#ffffff"/>
-        </LinearLayout>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="50dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:id="@+id/general">
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="50dp"
             android:gravity="center_vertical"
             android:background="@drawable/bottomline">
             <TextView
@@ -186,6 +139,7 @@
                 android:text="@string/general"
                 android:textColor="#ffffff"
                 android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
                 android:layout_marginBottom="5dp"/>
         </RelativeLayout>
         <LinearLayout
@@ -196,7 +150,7 @@
             android:layout_marginRight="10dp">
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="60dp"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
                 android:layout_marginTop="5dp"
@@ -209,8 +163,8 @@
                     android:id="@+id/log_out_text"
                     android:textColor="#ffffff"/>
                 <ImageButton
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="10dp"
                     android:background="@drawable/arrow"
@@ -218,7 +172,7 @@
             </RelativeLayout>
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="60dp"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
                 android:background="@drawable/bottomline">
@@ -229,9 +183,16 @@
                     android:layout_marginLeft="10dp"
                     android:id="@+id/clear_cache_text"
                     android:textColor="#ffffff"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/cacheSize"
+                    android:textColor="#ffffff"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="45dp"/>
                 <ImageButton
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="10dp"
                     android:background="@drawable/arrow"
@@ -239,7 +200,7 @@
             </RelativeLayout>
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="60dp"
                 android:orientation="horizontal"
                 android:gravity="center_vertical">
                 <TextView
@@ -250,8 +211,8 @@
                     android:id="@+id/delete_notes_text"
                     android:textColor="#ffffff"/>
                 <ImageButton
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="10dp"
                     android:background="@drawable/arrow"

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:background="#304252">
+
+    <ImageButton
+        android:layout_width="20sp"
+        android:layout_height="20sp"
+        android:layout_alignParentLeft="true"
+        android:background="@drawable/arrow_left"
+        android:id="@+id/edit_note_back"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="16dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="16dp"
+        android:padding="4dp"
+        android:textColor="@android:color/white"
+        android:background="@drawable/itemborder"
+        android:text="Save"
+        android:id="@+id/save" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/title_prompt"
+        android:text="Note Title"
+        android:padding="4dp"
+        android:textColor="@android:color/white"
+        android:layout_alignBaseline="@+id/edit_note_title"
+        android:layout_alignBottom="@+id/edit_note_title"
+        android:layout_toStartOf="@+id/edit_note_title"
+        android:layout_marginEnd="10dp" />
+
+
+    <EditText
+        android:id="@+id/edit_note_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="13dp"
+        android:ems="9"
+        android:padding="4dp"
+        android:inputType="textPersonName"
+        android:text=""
+        android:textColor="@android:color/white"
+        android:background="@drawable/itemborder"
+        android:layout_marginEnd="43dp"
+        android:layout_below="@+id/save"
+        android:layout_alignEnd="@+id/save" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Date Created: "
+        android:layout_below="@+id/edit_note_title"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:id="@+id/edit_note_date"
+        android:textColor="@android:color/white"/>
+
+    <EditText
+        android:id="@+id/multilineText"
+        android:layout_width="match_parent"
+        android:layout_height="360dp"
+        android:ems="10"
+        android:inputType="textMultiLine"
+        android:gravity="clip_horizontal|clip_vertical"
+        android:layout_below="@+id/edit_note_date"
+
+        android:layout_centerHorizontal="true"
+        android:textColor="@android:color/white"
+        android:padding="16dp"
+        android:background="@drawable/itemborder"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="16dp"/>
+
+    <ImageButton
+        android:id="@+id/edit_note_record"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_below="@+id/multilineText"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@mipmap/mic_icon" />
+
+</RelativeLayout>

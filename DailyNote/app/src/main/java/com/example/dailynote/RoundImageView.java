@@ -10,10 +10,6 @@ import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
-/**
- * Created by skins on 2017/9/27.
- */
-
 public class RoundImageView extends android.support.v7.widget.AppCompatImageView {
     public RoundImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -47,8 +43,7 @@ public class RoundImageView extends android.support.v7.widget.AppCompatImageView
     }
 
     @Override
-    protected void onLayout(boolean changed, int left, int top, int right,
-                            int bottom) {
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
         int w = getWidth();
         int h = getHeight();
@@ -59,7 +54,6 @@ public class RoundImageView extends android.support.v7.widget.AppCompatImageView
     public void draw(Canvas canvas) {
         canvas.saveLayer(roundRect, zonePaint, Canvas.ALL_SAVE_FLAG);
         canvas.drawRoundRect(roundRect, rect_adius, rect_adius, zonePaint);
-        //
         canvas.saveLayer(roundRect, maskPaint, Canvas.ALL_SAVE_FLAG);
         super.draw(canvas);
         canvas.restore();
