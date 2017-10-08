@@ -2,32 +2,34 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     android:background="#304252">
-
-    <ImageButton
-        android:layout_width="20sp"
-        android:layout_height="20sp"
-        android:layout_alignParentLeft="true"
-        android:background="@drawable/arrow_left"
-        android:id="@+id/edit_note_back"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginRight="16dp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        android:id="@+id/buttonmeny">
+        <ImageButton
+            android:layout_width="20sp"
+            android:layout_height="20sp"
+            android:layout_alignParentLeft="true"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/arrow_left"
+            android:id="@+id/edit_note_back"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
+    </LinearLayout>
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/save"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_alignParentRight="true"
+        android:layout_marginTop="10dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginRight="16dp"
-        android:padding="4dp"
-        android:textColor="@android:color/white"
-        android:background="@drawable/itemborder"
-        android:text="Save"
-        android:id="@+id/save" />
-
+        android:layout_marginRight="8dp"
+        android:background="@drawable/save"
+        android:textColor="@android:color/white" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -53,23 +55,23 @@
         android:textColor="@android:color/white"
         android:background="@drawable/itemborder"
         android:layout_marginEnd="43dp"
-        android:layout_below="@+id/save"
-        android:layout_alignEnd="@+id/save" />
+        android:layout_below="@+id/buttonmeny"
+        android:layout_alignEnd="@+id/buttonmeny" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Date Created: "
-        android:layout_below="@+id/edit_note_title"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="17dp"
         android:id="@+id/edit_note_date"
-        android:textColor="@android:color/white"/>
+        android:textColor="@android:color/white"
+        android:layout_below="@+id/edit_note_title"
+        android:layout_alignStart="@+id/edit_note_title" />
 
     <EditText
         android:id="@+id/multilineText"
         android:layout_width="match_parent"
-        android:layout_height="360dp"
+        android:layout_height="335dp"
         android:ems="10"
         android:inputType="textMultiLine"
         android:gravity="clip_horizontal|clip_vertical"
@@ -93,7 +95,7 @@
         android:layout_marginBottom="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:background="@mipmap/mic_icon" />
 
 </RelativeLayout>

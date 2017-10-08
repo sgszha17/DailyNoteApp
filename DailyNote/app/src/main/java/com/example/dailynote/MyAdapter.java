@@ -13,7 +13,6 @@
  * @email tzou2@student.unimelb.edu.au
  *
  **/
-
 package com.example.dailynote;
 
 import android.app.Activity;

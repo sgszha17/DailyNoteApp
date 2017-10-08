@@ -15,15 +15,11 @@
  **/
 package com.example.dailynote;
 
+
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-/**
- * Created by David on 2017/10/5.
- * to be finished
- */
 
 public class Note implements Comparable<Note>, Serializable{
     String date;

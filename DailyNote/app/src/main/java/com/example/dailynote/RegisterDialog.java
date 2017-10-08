@@ -22,10 +22,6 @@ import android.view.View;
 import android.widget.*;
 
 
-/**
- * Created by Siyu Zhang on 2017/10/1.
- */
-
 public class RegisterDialog extends Dialog {
 
     private Button confirm;

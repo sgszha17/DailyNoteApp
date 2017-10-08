@@ -13,7 +13,6 @@
  * @email tzou2@student.unimelb.edu.au
  *
  **/
-
 package com.example.dailynote;
 
 import android.app.Activity;
@@ -68,6 +67,7 @@ import java.util.Calendar;
 
 
 public class Notes extends Activity {
+
     private ImageButton settings;
     private ImageButton createNewNoteButton;
     private RelativeLayout background;

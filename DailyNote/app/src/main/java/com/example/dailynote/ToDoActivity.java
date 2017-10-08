@@ -1,5 +1,5 @@
 /**
- * @(LaunchActivity).java     1.61 08/10/2017
+ * @(ToDoActivity).java     1.61 08/10/2017
  *
  * Copyright 2017 University of Melbourne. All rights reserved.
  *
@@ -165,9 +165,9 @@ public class ToDoActivity extends FragmentActivity
 
 
 
-        /**
-         * Initial Back end connection
-         */
+    /**
+     * Initial Back end connection
+     */
         try {
             // Create the Mobile Service Client instance, using the provided
             // Mobile Service URL and key
@@ -187,9 +187,9 @@ public class ToDoActivity extends FragmentActivity
             });
 
         } catch (MalformedURLException e) {
-            //   createAndShowDialog(new Exception("There was an error creating the Mobile Service. Verify the URL"), "Error");
+         //   createAndShowDialog(new Exception("There was an error creating the Mobile Service. Verify the URL"), "Error");
         } catch (Exception e){
-            //  createAndShowDialog(e, "Error");
+          //  createAndShowDialog(e, "Error");
         }
 
         //Get the Mobile Service Table instance to use
@@ -201,31 +201,31 @@ public class ToDoActivity extends FragmentActivity
     //silent google sign in commented for siyu
 
     /**
-     @Override
-     public void onStart() {
-     super.onStart();
+    @Override
+    public void onStart() {
+        super.onStart();
 
-     OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
-     if (opr.isDone()) {
-     // If the user's cached credentials are valid, the OptionalPendingResult will be "done"
-     // and the GoogleSignInResult will be available instantly.
-     Log.d(TAG, "Got cached sign-in");
-     GoogleSignInResult result = opr.get();
-     handleSignInResult(result);
-     } else {
-     // If the user has not previously signed in on this device or the sign-in has expired,
-     // this asynchronous branch will attempt to sign in the user silently.  Cross-device
-     // single sign-on will occur in this branch.
-     showProgressDialog();
-     opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
-     @Override
-     public void onResult(GoogleSignInResult googleSignInResult) {
-     hideProgressDialog();
-     handleSignInResult(googleSignInResult);
-     }
-     });
-     }
-     }*/
+        OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
+        if (opr.isDone()) {
+            // If the user's cached credentials are valid, the OptionalPendingResult will be "done"
+            // and the GoogleSignInResult will be available instantly.
+            Log.d(TAG, "Got cached sign-in");
+            GoogleSignInResult result = opr.get();
+            handleSignInResult(result);
+        } else {
+            // If the user has not previously signed in on this device or the sign-in has expired,
+            // this asynchronous branch will attempt to sign in the user silently.  Cross-device
+            // single sign-on will occur in this branch.
+            showProgressDialog();
+            opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
+                @Override
+                public void onResult(GoogleSignInResult googleSignInResult) {
+                    hideProgressDialog();
+                    handleSignInResult(googleSignInResult);
+                }
+            });
+        }
+    }*/
 
 
     @Override
@@ -463,7 +463,7 @@ public class ToDoActivity extends FragmentActivity
      */
     public Users addItemInTable(Users item) throws ExecutionException, InterruptedException {
         Log.d(TAG, "addItemInTable: Debug");
-        Users entity = user.insert(item).get();
+       Users entity = user.insert(item).get();
 
         return entity;
     }

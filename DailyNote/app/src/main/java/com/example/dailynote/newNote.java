@@ -40,13 +40,13 @@ import static java.text.DateFormat.getDateInstance;
 
 public class newNote extends Activity {
 
-    private ImageButton mic;
     private final int REQ_CODE_SPEECH_INPUT = 100;
+    private ImageButton mic;
     private ImageButton backButton;
     private ImageButton recordButton;
     private TextView saveButton;
-    private EditText noteTitle;
     private TextView dateCreated;
+    private EditText noteTitle;
     private EditText noteContent;
     private Note newNote;
 
