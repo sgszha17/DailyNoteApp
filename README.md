@@ -5,10 +5,12 @@ This repository contains frontend(DailyNote) and beckend(msbuild-master).
 DailyNote_Android is a Android project contain sample document connecting database.
 DailyNoteDB is a database server project using C#.
 
+## Briefing 
+
+* DailyNote aims to help people gather information completely in several important situations. The information may important for user to make better decisions which may affect the future and the life.
+
 ## App Structure
 <img width="490" alt="app_structure2" src="https://user-images.githubusercontent.com/11943815/31317562-2e869e46-ac8f-11e7-9b3b-aaa342461c69.png">
-
-DailyNote aim to help people gather information completely in several important situations. The information may important for user to make decisions which may affect the future.
 
 ## DailyNote -- Frontend
 The frontend is developed by Andtroid Studio(https://developer.android.com/studio/index.html) using java. There are several screeshot to introduce the application.
@@ -68,11 +70,15 @@ This is the backend of DailyNote allow store user's information in a SQL Databas
 There are three main document: 
 * Users -- A Data Transfer Object
 * UsersController -- A Table Controller
-* M1 -- A First code migration document which used to contruct table in database
+* M1 -- A First code migration document which used to construct table in database
 After user register, in the frontend, a user instance will be transmitted to server and stored into database: 
 
 ![screenshots_of_userstable](https://user-images.githubusercontent.com/11943815/31317636-3a1f67b4-ac90-11e7-9d43-ff2a75adb810.JPG)
 
 The server also has capability to deal with query.
 
+## Authors
+* Dawei Wang
+* Siyu Zhang 
+* Tong Zou
 
