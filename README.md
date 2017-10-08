@@ -3,7 +3,9 @@
 
 This repository contains frontend(DailyNote) and beckend(msbuild-master).
 DailyNote_Android is a Android project contain sample document connecting database.
-DailyNoteDB is a database server project using C#.
+DailyNoteDB is a database server project using C#. 
+
+There is a [demonstration is avaliable on Youtube.](https://www.youtube.com/watch?v=1C_NXLIWlnA&feature=youtu.be)
 
 ## Briefing 
 
@@ -20,7 +22,7 @@ The icon of this application is a microphone include a notebook:
 
 ![ic_launcher](https://user-images.githubusercontent.com/11943815/31317162-f4097af6-ac87-11e7-8660-c4857154815d.png)
 
-It is indecate the 
+It indicate that the note can be "write" by microphone. 
 
 ### Login
 This function allow user register and login:
@@ -35,7 +37,7 @@ When user shaking the phone, a small menu will jump up, the user is able click t
 
 ![shake](https://user-images.githubusercontent.com/11943815/31317078-1ad65f7a-ac86-11e7-977f-e987e2f518d8.png)
 
-This apply the accelerator of phone. 
+This apply the accelerometer of phone. 
 
 Besides that, the pencil button on the top left side on the screen is able open notes edit page directly:
 
@@ -58,7 +60,7 @@ The wheel gear button on the note list page is an access to the setting page. In
 
 ![settingpic](https://user-images.githubusercontent.com/11943815/31317404-548b75b0-ac8c-11e7-906b-26675d242f3a.png)
 
-The system allow user take picture directly or select a picture from album. User is also cut the picture.
+The system allow user take picture directly or select a picture from album. User is also cut the picture. This is the utility of camera of phone.
 
 ![cutpicture](https://user-images.githubusercontent.com/11943815/31317467-429810b0-ac8d-11e7-9aa4-d25eab5ab887.png)
 
@@ -66,11 +68,12 @@ Then, on the setting page, user can logout their account and change to another a
 
 
 ## msbuild-master -- Backend
-This is the backend of DailyNote allow store user's information in a SQL Database, query data and delete data. It is developed based on azure service(https://azure.microsoft.com/en-au/free/) using Visual Stodio(https://www.visualstudio.com/zh-hans/?rr=https%3A%2F%2Fwww.google.com.au%2F). 
+This is the backend of DailyNote allow store user's information in a SQL Database, query data and delete data. It is developed based on azure service(https://azure.microsoft.com/en-au/free/) using Visual Studio(https://www.visualstudio.com/zh-hans/?rr=https%3A%2F%2Fwww.google.com.au%2F). 
 There are three main document: 
 * Users -- A Data Transfer Object
 * UsersController -- A Table Controller
 * M1 -- A First code migration document which used to construct table in database
+
 After user register, in the frontend, a user instance will be transmitted to server and stored into database: 
 
 ![screenshots_of_userstable](https://user-images.githubusercontent.com/11943815/31317636-3a1f67b4-ac90-11e7-9d43-ff2a75adb810.JPG)
@@ -78,7 +81,10 @@ After user register, in the frontend, a user instance will be transmitted to ser
 The server also has capability to deal with query.
 
 ## Authors
-* Dawei Wang
+* Dawei Wang 
+   -- daweiw@student.unimelb.edu.au
 * Siyu Zhang 
+   -- siyuz6@student.unimelb.edu.au
 * Tong Zou
+  -- tzou2@student.unimelb.edu.au
 
